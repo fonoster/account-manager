@@ -1,0 +1,14 @@
+{
+  "debug.javascript.unmapMissingSources": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.husky": true,
+    "**/node_modules": true,
+    "**/tsconfig.tsbuildinfo": true,
+    "**/.tsconfig.eslint.json": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

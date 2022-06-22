@@ -1,8 +1,31 @@
-.env*
-node_modules
-*.log
+# Tests
 reporting/*
 out/*
 dist
 coverage
 .nyc_output
+
+node_modules
+/.cache
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Husky
+.husky/_
+.husky/.gitignore
+
+# Yarn
+.yarn/*
+.pnp.*
+yarn-error.log
+yarn.lock
+
+# NVM
+.nvmrc
+
+# Environments
+.env*
+!.env.example

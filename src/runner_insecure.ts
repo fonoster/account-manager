@@ -1,5 +1,7 @@
+#!/usr/bin/env node
+
 /*
- * Copyright (C) <%= YEAR %> by Fonoster Inc (https://fonoster.com)
+ * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
  * http://github.com/fonoster
  *
  * This file is part of account-manager
@@ -16,3 +18,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {runServices, Tracer} from "@fonoster/common";
+import {AccountManagerService} from "./protos";
+import {AccountManagerServer} from "./service/account_manager";
+
+Tracer.init("account-manager-service");
+
+const services = [
+  {
+    name: "AccountManager",
+    version: "v1beta1",
+    service: AccountManagerService,
+    server: new AccountManagerServer()
+  }
+];
+
+runServices(services, []);

@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package fonoster.account_manager.v1beta1;
+
+message Plan {
+  string ref = 1;
+  string name = 2;
+  string description = 3;
+  int64 amount = 4;
+  string currency = 5;
+  string recurring_type = 6;
+}
+
+message ChangePlanRequest {
+  string plan_ref = 1;
+}
+
+message ChangePlanResponse {
+  Plan plan = 1;
+}
+
+message GetPlanRequest {
+  string plan_ref = 1;
+}
+
+message GetPlanResponse {
+  Plan plan = 1;
+}
+
+message ListPlansRequest {
+  optional int32 limit = 1;
+}
+
+message ListPlansResponse {
+  repeated Plan plans = 1;
+}
+
+message ListPaymentMethodRequest {
+  optional string payment_type = 1;
+}
+
+message ListPaymentMethodResponse {
+  message PaymentMethod {
+    string ref = 1;
+    string card_brand = 2;
+    string card_last_four = 3;
+    int32 card_exp_month = 4;
+    int32 card_exp_year = 5;
+  }
+  repeated PaymentMethod payment_methods = 1;
+}
+
+message ListInvoicesRequest {
+  optional int32 limit = 1;
+}
+
+message ListInvoicesResponse {
+  message Invoice {
+    string ref = 1;
+    string currency = 2;
+    int64 paid_amount = 3;
+    int64 created_at = 4;
+  }
+  repeated Invoice invoices = 1;
+}
+
+message GetPublishableKeyRequest {
+  string client_ref = 1;
+}
+
+message GetPublishableKeyResponse {
+  string client_ref = 1;
+  string publishable_key = 2;
+}
+
+service AccountManager {
+  rpc GetPublishableKey(GetPublishableKeyRequest)
+    returns (GetPublishableKeyResponse);
+  rpc ChangePlan (ChangePlanRequest) returns (ChangePlanResponse) {}
+  rpc GetPlan (GetPlanRequest) returns (GetPlanResponse) {}
+  rpc ListPlans (ListPlansRequest) returns (ListPlansResponse) {}
+  rpc ListPaymentMethods (ListPaymentMethodRequest)
+    returns (ListPaymentMethodResponse) {}
+  rpc ListInvoices (ListInvoicesRequest) returns (ListInvoicesResponse) {}
+}

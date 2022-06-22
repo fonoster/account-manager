@@ -1,37 +1,37 @@
-# Fonoster {Service Name}
+# Fonoster Account Manager
 
-> {A short description of the image, same as the Github Repo description.}
+> TODO: {A short description of the image, same as the Github Repo description.}
 
-{Badges should all be in one row without carriage returns. Replace the {name} with your docker image name.}
+TODO: {Badges should all be in one row without carriage returns. Replace the {name} with your docker image name.}
 
-[![publish to docker hub](https://github.com/fonoster/nodejs-service/actions/workflows/gh_docker.yml/badge.svg)](https://github.com/fonoster/nodejs-service/actions/workflows/gh_docker.yml)
+[![publish to docker hub](https://github.com/fonoster/account-manager/actions/workflows/gh_docker.yml/badge.svg)](https://github.com/fonoster/account-manager/actions/workflows/gh_docker.yml)
 
-{Longer description of what the image provides.}
+TODO: {Longer description of what the image provides.}
 
 Please read the [documentation](link) on how Fonoster services are created and how to work with them.
 
-## Available Versions
+## TODO: Available Versions
 
 {Keep this as-is, but replace {name} with your Docker image name.}
 
 You can see all images available to pull from Docker Hub via the [Tags]() page. Docker tag names that begin with a "change type" word such as task, bug, or feature are available for testing and may be removed at any time.
 
-## Installation
+## TODO: Installation
 
 You can clone this repository and manually build it.
 
 ```
-cd fonoster/{service}\:%%VERSION%%
-docker build -t fonoster/{service}:%%VERSION%% .
+cd fonoster/account_manager\:%%VERSION%%
+docker build -t fonoster/account_manager:%%VERSION%% .
 ```
 
 Otherwise, you can pull this image from the docker index.
 
 ```
-docker pull fonoster/{service}:%%VERSION%%
+docker pull fonoster/account_manager:%%VERSION%%
 ```
 
-## Usage Example
+## TODO: Usage Example
 
 {An example of running the container. Most Fonoster services use docker-compose, and docker run is also beneficial.}
 
@@ -48,13 +48,13 @@ npm i
 npm start
 ```
 
-## Specs
+## TODO: Specs
 
 Optional specification notes.
 
 {List of packages and tools, H3 section breakouts for more detail}
 
-## Environment Variables
+## TODO: Environment Variables
 
 Environment variables are used in the entry point script to render configuration templates. You can specify the values of these variables during `docker run`, `docker-compose up`, or in Kubernetes manifests in the `env` array.
 
@@ -63,16 +63,16 @@ Environment variables are used in the entry point script to render configuration
 - `EXAMPLE_VAR2` - Example variable 1. **Required**
 - `EXAMPLE_VAR2` - Example optiona variable
 
-## Exposed ports
+## TODO: Exposed ports
 
 - `3000` - Default application port for HTTP
 
-## Volumes
+## TODO: Volumes
 
 - `/your/file/location` - File location
 - `/some/special/script.sh` - List special scripts
 
-## Useful File Locations
+## TODO: Useful File Locations
 
 - `/some/special/script.sh` - List special scripts
 - `/magic/dir` - And also directories

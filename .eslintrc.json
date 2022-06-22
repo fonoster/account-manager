@@ -32,6 +32,18 @@
     ],
     "no-loops/no-loops": 2,
     "no-console": 1,
-    "prettier/prettier": 2
+    "prettier/prettier": 2,
+    "require-jsdoc": [
+      "error",
+      {
+        "require": {
+          "FunctionDeclaration": false,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+        }
+      }
+    ]
   }
 }
