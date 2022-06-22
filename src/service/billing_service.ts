@@ -194,7 +194,7 @@ export class BillingService {
     if (!customer) return [];
 
     const invoices = await this.stripe.invoices.list({
-      limit: limit || 100,
+      limit: limit || 12,
       status: "paid",
       customer: customer.ref
     });
