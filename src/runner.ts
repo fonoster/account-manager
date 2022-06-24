@@ -23,21 +23,34 @@ import {runServices, Tracer} from "@fonoster/common";
 import {AuthMiddleware} from "@fonoster/auth";
 import {AccountManagerService} from "./protos";
 import {AccountManagerServer} from "./service/account_manager";
+import express from "express";
+import logger from "@fonoster/logger";
+import {webhook} from "./service/webhook";
 
 Tracer.init("account-manager-service");
 
-const services = [
-  {
-    name: "AccountManager",
-    version: "v1beta1",
-    service: AccountManagerService,
-    server: new AccountManagerServer()
-  }
-];
+const PORT = process.env.PORT || 3000;
 
-const authMiddle = {
-  name: "Authentication",
-  middlewareObj: new AuthMiddleware(getSalt()).middleware
-};
+const app = express();
 
-runServices(services, [authMiddle]);
+app.post("/webhook", express.raw({type: "application/json"}), webhook);
+
+app.listen(PORT, () => {
+  logger.info("AccountManager service is running");
+
+  const services = [
+    {
+      name: "AccountManager",
+      version: "v1beta1",
+      service: AccountManagerService,
+      server: new AccountManagerServer()
+    }
+  ];
+
+  const authMiddle = {
+    name: "Authentication",
+    middlewareObj: new AuthMiddleware(getSalt()).middleware
+  };
+
+  runServices(services, [authMiddle]);
+});

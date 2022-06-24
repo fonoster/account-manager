@@ -182,6 +182,7 @@ export class AccountManagerServer implements IAccountManagerServer {
   ) {
     try {
       const accessKeyId = getAccessKeyId(call);
+      const paymentMethodType = call.request.getPaymentType() || undefined;
 
       if (!accessKeyId) {
         throw new Error("Missing required parameters");
@@ -189,7 +190,7 @@ export class AccountManagerServer implements IAccountManagerServer {
 
       const methods = await BillingService.getInstance().listPaymentMethods(
         accessKeyId,
-        call.request.getPaymentType()
+        paymentMethodType
       );
 
       const response = new ListPaymentMethodResponse().setPaymentMethodsList(

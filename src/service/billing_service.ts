@@ -28,7 +28,8 @@ export class BillingService {
   public constructor(
     private readonly config = {
       secretKey: process.env.STRIPE_SECRET_KEY,
-      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      webhookSecret: process.env.STRIPE_WEBHOOK_SECRET
     }
   ) {
     if (!this.config.secretKey) {
@@ -212,6 +213,8 @@ export class BillingService {
 
     if (!customer) return [];
 
+    if (!type) throw new Error("Missing payment method type");
+
     const paymentMethods = await this.stripe.customers.listPaymentMethods(
       customer.ref,
       {
@@ -226,6 +229,14 @@ export class BillingService {
       expMonth: paymentMethod.card.exp_month,
       expYear: paymentMethod.card.exp_year
     }));
+  }
+
+  public createEvent(payload: string | Buffer, signature: string) {
+    return this.stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      this.config.webhookSecret
+    );
   }
 
   public static getInstance(): BillingService {

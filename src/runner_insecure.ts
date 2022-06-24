@@ -21,16 +21,29 @@
 import {runServices, Tracer} from "@fonoster/common";
 import {AccountManagerService} from "./protos";
 import {AccountManagerServer} from "./service/account_manager";
+import express from "express";
+import logger from "@fonoster/logger";
+import {webhook} from "./service/webhook";
 
 Tracer.init("account-manager-service");
 
-const services = [
-  {
-    name: "AccountManager",
-    version: "v1beta1",
-    service: AccountManagerService,
-    server: new AccountManagerServer()
-  }
-];
+const PORT = process.env.PORT || 3000;
 
-runServices(services, []);
+const app = express();
+
+app.post("/webhook", express.raw({type: "application/json"}), webhook);
+
+app.listen(PORT, () => {
+  logger.info("AccountManager service is running");
+
+  const services = [
+    {
+      name: "AccountManager",
+      version: "v1beta1",
+      service: AccountManagerService,
+      server: new AccountManagerServer()
+    }
+  ];
+
+  runServices(services);
+});
