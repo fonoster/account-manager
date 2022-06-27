@@ -1,7 +1,6 @@
 # Tests
 reporting/*
 out/*
-dist
 coverage
 .nyc_output
 

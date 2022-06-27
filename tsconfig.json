@@ -2,7 +2,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "./src",
     "declaration": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
@@ -11,10 +11,12 @@
     "target": "es2020",
     "lib": [ "es2020" ],
     "moduleResolution": "node",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "test"
   ]
 }
