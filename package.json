@@ -27,6 +27,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",
     "build": "tsc -b tsconfig.json",
+    "postbuild": "cp -a ./src/protos/ ./dist/protos",
     "format": "prettier --write src",
     "gen:docs": "node .scripts/docs-generator.js && cp docs/service.md",
     "lint": "eslint src --ext .ts --fix",
