@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {getAccessKeyId, getAccessKeySecret} from "@fonoster/core";
 import type {
   ServerUnaryCall,
@@ -39,6 +38,7 @@ import {
   ListPlansResponse,
   Plan
 } from "../protos";
+import {users} from "./api";
 import {BillingService} from "./billing_service";
 
 export interface ICallback<R> {
@@ -79,17 +79,25 @@ export class AccountManagerServer implements IAccountManagerServer {
         throw new Error("Missing required parameters");
       }
 
-      const customer = await BillingService.getInstance().upsertCustomer(
-        accessKeyId,
-        accessKeySecret
-      );
+      const {customer, user} =
+        await BillingService.getInstance().upsertCustomer(accessKeyId);
 
-      if (!customer) throw new Error("Customer not found");
+      if (!customer || !user) throw new Error("Customer not found");
+
+      if (user.status && user.status !== "active") {
+        throw new Error(
+          `You can't switch plans on a ${user.status.toLowerCase()} account. Please contact support.`
+        );
+      }
 
       const {plan} = await BillingService.getInstance().changePlan(
         customer,
         planRef
       );
+
+      if (!plan) throw new Error("Plan not changed");
+
+      await users.updateUser({ref: accessKeyId, limiter: plan.ref});
 
       const response = new ChangePlanResponse().setPlan(
         /**

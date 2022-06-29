@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Users from "@fonoster/users";
 import Stripe from "stripe";
+import {users} from "./api";
 import {Customer} from "./types";
 
 export class BillingService {
@@ -43,15 +43,7 @@ export class BillingService {
     return this.config.publishableKey;
   }
 
-  public async upsertCustomer(
-    accessKeyId: string,
-    accessKeySecret: string
-  ): Promise<Customer> {
-    const users = new Users({
-      accessKeyId,
-      accessKeySecret
-    });
-
+  public async upsertCustomer(accessKeyId: string) {
     const user = await users.getUser(accessKeyId);
 
     if (!user) throw new Error("User not found");
@@ -66,7 +58,10 @@ export class BillingService {
         }
       }));
 
-    return customer;
+    return {
+      customer,
+      user
+    };
   }
 
   public async createCustomer(payload: {
@@ -237,6 +232,10 @@ export class BillingService {
       signature,
       this.config.webhookSecret
     );
+  }
+
+  public getStripe() {
+    return this.stripe;
   }
 
   public static getInstance(): BillingService {
