@@ -23,6 +23,8 @@ import {
   IListPlansRequest,
   IListPlansResponse
 } from "./types";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const grpc = require("@grpc/grpc-js");
 
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
@@ -53,6 +55,14 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
     super(AccountManagerClient, options);
 
     super.init();
+
+    /**
+     * @todo Temporal workaround to allow connection to the server
+     */
+    this.service = new this.ServiceClient(
+      this.options.endpoint || process.env.APISERVER_ENDPOINT,
+      grpc.credentials.createInsecure()
+    );
   }
 
   public async getPublishableKey(
