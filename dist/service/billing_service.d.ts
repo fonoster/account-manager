@@ -11,7 +11,10 @@ export declare class BillingService {
         webhookSecret: string;
     });
     getPublishableKey(): string;
-    upsertCustomer(accessKeyId: string, accessKeySecret: string): Promise<Customer>;
+    upsertCustomer(accessKeyId: string): Promise<{
+        customer: Customer;
+        user: import("@fonoster/users/dist/client/types").GetUserResponse;
+    }>;
     createCustomer(payload: {
         email: string;
         name: string;
@@ -66,5 +69,6 @@ export declare class BillingService {
         expYear: number;
     }[]>;
     createEvent(payload: string | Buffer, signature: string): Stripe.Event;
+    getStripe(): Stripe;
     static getInstance(): BillingService;
 }

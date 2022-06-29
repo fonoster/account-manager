@@ -28,12 +28,28 @@ const webhook = async (req, res) => {
     try {
         const signature = req.headers["stripe-signature"];
         const event = billing_service_1.BillingService.getInstance().createEvent(req.body, signature);
+        /**
+         * @todo Fix types
+         */
         const data = event.data.object;
         logger_1.default.info(`Webhook received: ${event.type}`);
         logger_1.default.info(`Webhook data: ${JSON.stringify(data)}`);
-        /**
-         * @todo: Handle webhook events
-         */
+        switch (event.type) {
+            case "invoice.payment_succeeded":
+                if (data["billing_reason"] === "subscription_create") {
+                    const subscriptionId = data["subscription"];
+                    const paymentId = data["payment_intent"];
+                    const paymentIntent = await billing_service_1.BillingService.getInstance()
+                        .getStripe()
+                        .paymentIntents.retrieve(paymentId);
+                    await billing_service_1.BillingService.getInstance()
+                        .getStripe()
+                        .subscriptions.update(subscriptionId, {
+                        default_payment_method: paymentIntent.payment_method
+                    });
+                }
+                break;
+        }
         res.send();
     }
     catch (err) {

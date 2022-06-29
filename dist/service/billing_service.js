@@ -22,8 +22,8 @@ exports.BillingService = void 0;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const users_1 = __importDefault(require("@fonoster/users"));
 const stripe_1 = __importDefault(require("stripe"));
+const api_1 = require("./api");
 class BillingService {
     constructor(config = {
         secretKey: process.env.STRIPE_SECRET_KEY,
@@ -39,12 +39,8 @@ class BillingService {
     getPublishableKey() {
         return this.config.publishableKey;
     }
-    async upsertCustomer(accessKeyId, accessKeySecret) {
-        const users = new users_1.default({
-            accessKeyId,
-            accessKeySecret
-        });
-        const user = await users.getUser(accessKeyId);
+    async upsertCustomer(accessKeyId) {
+        const user = await api_1.users.getUser(accessKeyId);
         if (!user)
             throw new Error("User not found");
         const customer = (await this.getCustomer(accessKeyId)) ||
@@ -55,7 +51,10 @@ class BillingService {
                     accessKeyId
                 }
             }));
-        return customer;
+        return {
+            customer,
+            user
+        };
     }
     async createCustomer(payload) {
         const customer = await this.stripe.customers.create(payload);
@@ -189,6 +188,9 @@ class BillingService {
     }
     createEvent(payload, signature) {
         return this.stripe.webhooks.constructEvent(payload, signature, this.config.webhookSecret);
+    }
+    getStripe() {
+        return this.stripe;
     }
     static getInstance() {
         if (!BillingService.instance) {

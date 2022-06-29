@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AccountManagerServer = void 0;
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
  * http://github.com/fonoster
@@ -17,10 +19,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.AccountManagerServer = void 0;
 const core_1 = require("@fonoster/core");
 const protos_1 = require("../protos");
+const api_1 = require("./api");
 const billing_service_1 = require("./billing_service");
 class AccountManagerServer {
     getPublishableKey(call, callback) {
@@ -43,10 +44,16 @@ class AccountManagerServer {
             if (!accessKeyId || !planRef || !accessKeySecret) {
                 throw new Error("Missing required parameters");
             }
-            const customer = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId, accessKeySecret);
-            if (!customer)
+            const { customer, user } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId);
+            if (!customer || !user)
                 throw new Error("Customer not found");
+            if (user.status && user.status !== "active") {
+                throw new Error(`You can't switch plans on a ${user.status.toLowerCase()} account. Please contact support.`);
+            }
             const { plan } = await billing_service_1.BillingService.getInstance().changePlan(customer, planRef);
+            if (!plan)
+                throw new Error("Plan not changed");
+            await api_1.users.updateUser({ ref: accessKeyId, limiter: plan.ref });
             const response = new protos_1.ChangePlanResponse().setPlan(
             /**
              * @todo Create plan mapper to gRPC
