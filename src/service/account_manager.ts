@@ -90,7 +90,7 @@ export class AccountManagerServer implements IAccountManagerServer {
 
       const paymentMethod = await BillingService.getInstance().addPaymentMethod(
         paymentMethodId,
-        customer.ref
+        customer
       );
 
       if (!paymentMethod) throw new Error("Payment method not added");

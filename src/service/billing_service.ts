@@ -203,10 +203,23 @@ export class BillingService {
     }));
   }
 
-  public async addPaymentMethod(paymentMethodId: string, customer: string) {
-    return this.stripe.paymentMethods.attach(paymentMethodId, {
-      customer
-    });
+  public async addPaymentMethod(paymentMethodId: string, customer: Customer) {
+    const paymentMethod = await this.stripe.paymentMethods.attach(
+      paymentMethodId,
+      {
+        customer: customer.ref
+      }
+    );
+
+    const subscription = customer.subscriptions?.[0];
+
+    if (subscription) {
+      await this.stripe.subscriptions.update(subscription.id, {
+        default_payment_method: paymentMethod.id
+      });
+    }
+
+    return paymentMethod;
   }
 
   public async removePaymentMethod(paymentMethodId: string) {
