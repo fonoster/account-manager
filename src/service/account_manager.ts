@@ -208,9 +208,21 @@ export class AccountManagerServer implements IAccountManagerServer {
         );
       }
 
+      const paymentMethods =
+        await BillingService.getInstance().listPaymentMethods(accessKeyId);
+
+      if (planRef !== "starter") {
+        if (!paymentMethods || !paymentMethods?.length) {
+          throw new Error(
+            "Oops, you don't have any payment methods. Please add one to continue."
+          );
+        }
+      }
+
       const {plan} = await BillingService.getInstance().changePlan(
         customer,
-        planRef
+        planRef,
+        paymentMethods?.[0]?.ref
       );
 
       if (!plan) throw new Error("Plan not changed");

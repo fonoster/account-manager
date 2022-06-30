@@ -115,7 +115,13 @@ class AccountManagerServer {
             if (user.status && user.status !== "active") {
                 throw new Error(`You can't switch plans on a ${user.status.toLowerCase()} account. Please contact support.`);
             }
-            const { plan } = await billing_service_1.BillingService.getInstance().changePlan(customer, planRef);
+            const paymentMethods = await billing_service_1.BillingService.getInstance().listPaymentMethods(accessKeyId);
+            if (planRef !== "starter") {
+                if (!paymentMethods || !paymentMethods?.length) {
+                    throw new Error("Oops, you don't have any payment methods. Please add one to continue.");
+                }
+            }
+            const { plan } = await billing_service_1.BillingService.getInstance().changePlan(customer, planRef, paymentMethods?.[0]?.ref);
             if (!plan)
                 throw new Error("Plan not changed");
             await api_1.users.updateUser({ ref: accessKeyId, limiter: plan.ref });

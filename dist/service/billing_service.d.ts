@@ -41,7 +41,7 @@ export declare class BillingService {
         currency: string;
         recurringType: Stripe.Price.Recurring.Interval;
     }>;
-    changePlan(customer: Customer, planRef: string): Promise<{
+    changePlan(customer: Customer, planRef: string, paymentMethodId?: string): Promise<{
         subscription: Stripe.Subscription;
         plan: {
             ref: string;

@@ -138,7 +138,11 @@ export class BillingService {
     return prices.find((price) => price.ref === ref);
   }
 
-  public async changePlan(customer: Customer, planRef: string) {
+  public async changePlan(
+    customer: Customer,
+    planRef: string,
+    paymentMethodId?: string
+  ) {
     const plan = await this.getPlan(planRef);
 
     if (!plan) throw new Error("Plan not found");
@@ -154,13 +158,14 @@ export class BillingService {
             id: subscription.items.data[0].id,
             price: plan.externalRef
           }
-        ]
+        ],
+        default_payment_method: paymentMethodId
       });
     } else {
       subscription = await this.stripe.subscriptions.create({
         customer: customer.ref,
         items: [{price: plan.externalRef}],
-        payment_behavior: "default_incomplete",
+        default_payment_method: paymentMethodId,
         expand: ["latest_invoice.payment_intent"]
       });
     }
