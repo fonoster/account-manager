@@ -61,6 +61,8 @@ export declare class BillingService {
         currency: string;
         createdAt: number;
     }[]>;
+    addPaymentMethod(paymentMethodId: string, customer: string): Promise<Stripe.Response<Stripe.PaymentMethod>>;
+    removePaymentMethod(paymentMethodId: string): Promise<Stripe.Response<Stripe.PaymentMethod>>;
     listPaymentMethods(accessKeyId: string, type?: string): Promise<{
         ref: string;
         brand: string;

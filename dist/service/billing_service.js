@@ -169,6 +169,14 @@ class BillingService {
             createdAt: invoice.created
         }));
     }
+    async addPaymentMethod(paymentMethodId, customer) {
+        return this.stripe.paymentMethods.attach(paymentMethodId, {
+            customer
+        });
+    }
+    async removePaymentMethod(paymentMethodId) {
+        return this.stripe.paymentMethods.detach(paymentMethodId);
+    }
     async listPaymentMethods(accessKeyId, type = "card") {
         const customer = await this.getCustomer(accessKeyId);
         if (!customer)

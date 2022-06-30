@@ -12,6 +12,8 @@ interface IAccountManagerService extends grpc.ServiceDefinition<grpc.UntypedServ
     changePlan: IAccountManagerService_IChangePlan;
     getPlan: IAccountManagerService_IGetPlan;
     listPlans: IAccountManagerService_IListPlans;
+    addPaymentMethod: IAccountManagerService_IAddPaymentMethod;
+    removePaymentMethod: IAccountManagerService_IRemovePaymentMethod;
     listPaymentMethods: IAccountManagerService_IListPaymentMethods;
     listInvoices: IAccountManagerService_IListInvoices;
 }
@@ -52,6 +54,24 @@ interface IAccountManagerService_IListPlans extends grpc.MethodDefinition<accoun
     responseSerialize: grpc.serialize<account_manager_pb.ListPlansResponse>;
     responseDeserialize: grpc.deserialize<account_manager_pb.ListPlansResponse>;
 }
+interface IAccountManagerService_IAddPaymentMethod extends grpc.MethodDefinition<account_manager_pb.AddPaymentMethodRequest, account_manager_pb.AddPaymentMethodResponse> {
+    path: "/fonoster.account_manager.v1beta1.AccountManager/AddPaymentMethod";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<account_manager_pb.AddPaymentMethodRequest>;
+    requestDeserialize: grpc.deserialize<account_manager_pb.AddPaymentMethodRequest>;
+    responseSerialize: grpc.serialize<account_manager_pb.AddPaymentMethodResponse>;
+    responseDeserialize: grpc.deserialize<account_manager_pb.AddPaymentMethodResponse>;
+}
+interface IAccountManagerService_IRemovePaymentMethod extends grpc.MethodDefinition<account_manager_pb.RemovePaymentMethodRequest, account_manager_pb.RemovePaymentMethodResponse> {
+    path: "/fonoster.account_manager.v1beta1.AccountManager/RemovePaymentMethod";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<account_manager_pb.RemovePaymentMethodRequest>;
+    requestDeserialize: grpc.deserialize<account_manager_pb.RemovePaymentMethodRequest>;
+    responseSerialize: grpc.serialize<account_manager_pb.RemovePaymentMethodResponse>;
+    responseDeserialize: grpc.deserialize<account_manager_pb.RemovePaymentMethodResponse>;
+}
 interface IAccountManagerService_IListPaymentMethods extends grpc.MethodDefinition<account_manager_pb.ListPaymentMethodRequest, account_manager_pb.ListPaymentMethodResponse> {
     path: "/fonoster.account_manager.v1beta1.AccountManager/ListPaymentMethods";
     requestStream: false;
@@ -78,6 +98,8 @@ export interface IAccountManagerServer extends grpc.UntypedServiceImplementation
     changePlan: grpc.handleUnaryCall<account_manager_pb.ChangePlanRequest, account_manager_pb.ChangePlanResponse>;
     getPlan: grpc.handleUnaryCall<account_manager_pb.GetPlanRequest, account_manager_pb.GetPlanResponse>;
     listPlans: grpc.handleUnaryCall<account_manager_pb.ListPlansRequest, account_manager_pb.ListPlansResponse>;
+    addPaymentMethod: grpc.handleUnaryCall<account_manager_pb.AddPaymentMethodRequest, account_manager_pb.AddPaymentMethodResponse>;
+    removePaymentMethod: grpc.handleUnaryCall<account_manager_pb.RemovePaymentMethodRequest, account_manager_pb.RemovePaymentMethodResponse>;
     listPaymentMethods: grpc.handleUnaryCall<account_manager_pb.ListPaymentMethodRequest, account_manager_pb.ListPaymentMethodResponse>;
     listInvoices: grpc.handleUnaryCall<account_manager_pb.ListInvoicesRequest, account_manager_pb.ListInvoicesResponse>;
 }
@@ -95,6 +117,12 @@ export interface IAccountManagerClient {
     listPlans(request: account_manager_pb.ListPlansRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPlansResponse) => void): grpc.ClientUnaryCall;
     listPlans(request: account_manager_pb.ListPlansRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPlansResponse) => void): grpc.ClientUnaryCall;
     listPlans(request: account_manager_pb.ListPlansRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPlansResponse) => void): grpc.ClientUnaryCall;
+    addPaymentMethod(request: account_manager_pb.AddPaymentMethodRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.AddPaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    addPaymentMethod(request: account_manager_pb.AddPaymentMethodRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.AddPaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    addPaymentMethod(request: account_manager_pb.AddPaymentMethodRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.AddPaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    removePaymentMethod(request: account_manager_pb.RemovePaymentMethodRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.RemovePaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    removePaymentMethod(request: account_manager_pb.RemovePaymentMethodRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.RemovePaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    removePaymentMethod(request: account_manager_pb.RemovePaymentMethodRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.RemovePaymentMethodResponse) => void): grpc.ClientUnaryCall;
     listPaymentMethods(request: account_manager_pb.ListPaymentMethodRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPaymentMethodResponse) => void): grpc.ClientUnaryCall;
     listPaymentMethods(request: account_manager_pb.ListPaymentMethodRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPaymentMethodResponse) => void): grpc.ClientUnaryCall;
     listPaymentMethods(request: account_manager_pb.ListPaymentMethodRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPaymentMethodResponse) => void): grpc.ClientUnaryCall;
@@ -117,6 +145,12 @@ export class AccountManagerClient extends grpc.Client implements IAccountManager
     public listPlans(request: account_manager_pb.ListPlansRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPlansResponse) => void): grpc.ClientUnaryCall;
     public listPlans(request: account_manager_pb.ListPlansRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPlansResponse) => void): grpc.ClientUnaryCall;
     public listPlans(request: account_manager_pb.ListPlansRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPlansResponse) => void): grpc.ClientUnaryCall;
+    public addPaymentMethod(request: account_manager_pb.AddPaymentMethodRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.AddPaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    public addPaymentMethod(request: account_manager_pb.AddPaymentMethodRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.AddPaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    public addPaymentMethod(request: account_manager_pb.AddPaymentMethodRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.AddPaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    public removePaymentMethod(request: account_manager_pb.RemovePaymentMethodRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.RemovePaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    public removePaymentMethod(request: account_manager_pb.RemovePaymentMethodRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.RemovePaymentMethodResponse) => void): grpc.ClientUnaryCall;
+    public removePaymentMethod(request: account_manager_pb.RemovePaymentMethodRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.RemovePaymentMethodResponse) => void): grpc.ClientUnaryCall;
     public listPaymentMethods(request: account_manager_pb.ListPaymentMethodRequest, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPaymentMethodResponse) => void): grpc.ClientUnaryCall;
     public listPaymentMethods(request: account_manager_pb.ListPaymentMethodRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPaymentMethodResponse) => void): grpc.ClientUnaryCall;
     public listPaymentMethods(request: account_manager_pb.ListPaymentMethodRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: account_manager_pb.ListPaymentMethodResponse) => void): grpc.ClientUnaryCall;
