@@ -46,7 +46,7 @@ class AccountManagerServer {
             const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
             if (!customer)
                 throw new Error("Customer not found");
-            const paymentMethod = await billing_service_1.BillingService.getInstance().addPaymentMethod(paymentMethodId, customer.ref);
+            const paymentMethod = await billing_service_1.BillingService.getInstance().addPaymentMethod(paymentMethodId, customer);
             if (!paymentMethod)
                 throw new Error("Payment method not added");
             const response = new protos_1.AddPaymentMethodResponse().setPaymentMethod(new protos_1.PaymentMethod()
@@ -75,6 +75,26 @@ class AccountManagerServer {
             if (!paymentMethod)
                 throw new Error("Payment method not removed");
             const response = new protos_1.RemovePaymentMethodResponse().setSuccess(true);
+            callback(null, response);
+        }
+        catch (error) {
+            callback(error, null);
+        }
+    }
+    async setDefaultPaymentMethod(call, callback) {
+        try {
+            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const paymentMethodId = call.request.getPaymentMethodId();
+            if (!accessKeyId || !paymentMethodId) {
+                throw new Error("Missing required parameters");
+            }
+            const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
+            if (!customer)
+                throw new Error("Customer not found");
+            const paymentMethod = await billing_service_1.BillingService.getInstance().setDefaultPaymentMethod(paymentMethodId, customer);
+            if (!paymentMethod)
+                throw new Error("Payment method not set");
+            const response = new protos_1.SetDefaultPaymentMethodResponse().setSuccess(true);
             callback(null, response);
         }
         catch (error) {

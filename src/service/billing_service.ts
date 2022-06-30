@@ -222,6 +222,27 @@ export class BillingService {
     return paymentMethod;
   }
 
+  public async setDefaultPaymentMethod(
+    paymentMethodId: string,
+    customer: Customer
+  ) {
+    const paymentMethod = await this.stripe.paymentMethods.retrieve(
+      paymentMethodId
+    );
+
+    if (!paymentMethod) throw new Error("Payment method not found");
+
+    const subscription = customer.subscriptions?.[0];
+
+    if (!subscription) throw new Error("Subscription not found");
+
+    await this.stripe.subscriptions.update(subscription.id, {
+      default_payment_method: paymentMethod.id
+    });
+
+    return paymentMethod;
+  }
+
   public async removePaymentMethod(paymentMethodId: string) {
     return this.stripe.paymentMethods.detach(paymentMethodId);
   }

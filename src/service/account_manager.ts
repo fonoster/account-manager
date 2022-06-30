@@ -41,7 +41,9 @@ import {
   PaymentMethod,
   Plan,
   RemovePaymentMethodRequest,
-  RemovePaymentMethodResponse
+  RemovePaymentMethodResponse,
+  SetDefaultPaymentMethodRequest,
+  SetDefaultPaymentMethodResponse
 } from "../protos";
 import {users} from "./api";
 import {BillingService} from "./billing_service";
@@ -137,6 +139,43 @@ export class AccountManagerServer implements IAccountManagerServer {
       if (!paymentMethod) throw new Error("Payment method not removed");
 
       const response = new RemovePaymentMethodResponse().setSuccess(true);
+
+      callback(null, response);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  public async setDefaultPaymentMethod(
+    call: ServerUnaryCall<
+      SetDefaultPaymentMethodRequest,
+      SetDefaultPaymentMethodResponse
+    >,
+    callback: ICallback<SetDefaultPaymentMethodResponse>
+  ) {
+    try {
+      const accessKeyId = getAccessKeyId(call);
+      const paymentMethodId = call.request.getPaymentMethodId();
+
+      if (!accessKeyId || !paymentMethodId) {
+        throw new Error("Missing required parameters");
+      }
+
+      const customer = await BillingService.getInstance().getCustomer(
+        accessKeyId
+      );
+
+      if (!customer) throw new Error("Customer not found");
+
+      const paymentMethod =
+        await BillingService.getInstance().setDefaultPaymentMethod(
+          paymentMethodId,
+          customer
+        );
+
+      if (!paymentMethod) throw new Error("Payment method not set");
+
+      const response = new SetDefaultPaymentMethodResponse().setSuccess(true);
 
       callback(null, response);
     } catch (error) {

@@ -90,6 +90,14 @@ message RemovePaymentMethodResponse {
   bool success = 1;
 }
 
+message SetDefaultPaymentMethodRequest {
+  string payment_method_id = 1;
+}
+
+message SetDefaultPaymentMethodResponse {
+  bool success = 1;
+}
+
 service AccountManager {
   rpc GetPublishableKey(GetPublishableKeyRequest)
     returns (GetPublishableKeyResponse);
@@ -98,6 +106,8 @@ service AccountManager {
   rpc ListPlans (ListPlansRequest) returns (ListPlansResponse) {}
   rpc AddPaymentMethod (AddPaymentMethodRequest)
     returns (AddPaymentMethodResponse) {}
+  rpc SetDefaultPaymentMethod (SetDefaultPaymentMethodRequest)
+    returns (SetDefaultPaymentMethodResponse) {}
   rpc RemovePaymentMethod (RemovePaymentMethodRequest)
     returns (RemovePaymentMethodResponse) {}
   rpc ListPaymentMethods (ListPaymentMethodRequest)

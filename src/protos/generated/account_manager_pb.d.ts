@@ -450,3 +450,43 @@ export namespace RemovePaymentMethodResponse {
         success: boolean,
     }
 }
+
+export class SetDefaultPaymentMethodRequest extends jspb.Message { 
+    getPaymentMethodId(): string;
+    setPaymentMethodId(value: string): SetDefaultPaymentMethodRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetDefaultPaymentMethodRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: SetDefaultPaymentMethodRequest): SetDefaultPaymentMethodRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetDefaultPaymentMethodRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetDefaultPaymentMethodRequest;
+    static deserializeBinaryFromReader(message: SetDefaultPaymentMethodRequest, reader: jspb.BinaryReader): SetDefaultPaymentMethodRequest;
+}
+
+export namespace SetDefaultPaymentMethodRequest {
+    export type AsObject = {
+        paymentMethodId: string,
+    }
+}
+
+export class SetDefaultPaymentMethodResponse extends jspb.Message { 
+    getSuccess(): boolean;
+    setSuccess(value: boolean): SetDefaultPaymentMethodResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetDefaultPaymentMethodResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: SetDefaultPaymentMethodResponse): SetDefaultPaymentMethodResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetDefaultPaymentMethodResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetDefaultPaymentMethodResponse;
+    static deserializeBinaryFromReader(message: SetDefaultPaymentMethodResponse, reader: jspb.BinaryReader): SetDefaultPaymentMethodResponse;
+}
+
+export namespace SetDefaultPaymentMethodResponse {
+    export type AsObject = {
+        success: boolean,
+    }
+}

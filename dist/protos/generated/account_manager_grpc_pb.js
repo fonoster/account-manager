@@ -180,6 +180,28 @@ function deserialize_fonoster_account_manager_v1beta1_RemovePaymentMethodRespons
   return account_manager_pb.RemovePaymentMethodResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest(arg) {
+  if (!(arg instanceof account_manager_pb.SetDefaultPaymentMethodRequest)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.SetDefaultPaymentMethodRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest(buffer_arg) {
+  return account_manager_pb.SetDefaultPaymentMethodRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse(arg) {
+  if (!(arg instanceof account_manager_pb.SetDefaultPaymentMethodResponse)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.SetDefaultPaymentMethodResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse(buffer_arg) {
+  return account_manager_pb.SetDefaultPaymentMethodResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var AccountManagerService = exports.AccountManagerService = {
   getPublishableKey: {
@@ -236,6 +258,17 @@ var AccountManagerService = exports.AccountManagerService = {
     requestDeserialize: deserialize_fonoster_account_manager_v1beta1_AddPaymentMethodRequest,
     responseSerialize: serialize_fonoster_account_manager_v1beta1_AddPaymentMethodResponse,
     responseDeserialize: deserialize_fonoster_account_manager_v1beta1_AddPaymentMethodResponse,
+  },
+  setDefaultPaymentMethod: {
+    path: '/fonoster.account_manager.v1beta1.AccountManager/SetDefaultPaymentMethod',
+    requestStream: false,
+    responseStream: false,
+    requestType: account_manager_pb.SetDefaultPaymentMethodRequest,
+    responseType: account_manager_pb.SetDefaultPaymentMethodResponse,
+    requestSerialize: serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest,
+    requestDeserialize: deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest,
+    responseSerialize: serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse,
+    responseDeserialize: deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse,
   },
   removePaymentMethod: {
     path: '/fonoster.account_manager.v1beta1.AccountManager/RemovePaymentMethod',

@@ -170,9 +170,28 @@ class BillingService {
         }));
     }
     async addPaymentMethod(paymentMethodId, customer) {
-        return this.stripe.paymentMethods.attach(paymentMethodId, {
-            customer
+        const paymentMethod = await this.stripe.paymentMethods.attach(paymentMethodId, {
+            customer: customer.ref
         });
+        const subscription = customer.subscriptions?.[0];
+        if (subscription) {
+            await this.stripe.subscriptions.update(subscription.id, {
+                default_payment_method: paymentMethod.id
+            });
+        }
+        return paymentMethod;
+    }
+    async setDefaultPaymentMethod(paymentMethodId, customer) {
+        const paymentMethod = await this.stripe.paymentMethods.retrieve(paymentMethodId);
+        if (!paymentMethod)
+            throw new Error("Payment method not found");
+        const subscription = customer.subscriptions?.[0];
+        if (!subscription)
+            throw new Error("Subscription not found");
+        await this.stripe.subscriptions.update(subscription.id, {
+            default_payment_method: paymentMethod.id
+        });
+        return paymentMethod;
     }
     async removePaymentMethod(paymentMethodId) {
         return this.stripe.paymentMethods.detach(paymentMethodId);
