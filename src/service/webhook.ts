@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import logger from "@fonoster/logger";
 import {BillingService} from "./billing_service";
+import Stripe from "stripe";
 
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
@@ -34,23 +35,24 @@ export const webhook = async (req: Request, res: Response) => {
     logger.verbose(`Webhook received: ${event.type}`);
     logger.verbose(`Webhook data: ${JSON.stringify(data)}`);
 
-    switch (event.type) {
-      case "invoice.payment_succeeded":
-        if (data["billing_reason"] === "subscription_create") {
-          const subscriptionId = data["subscription"];
-          const paymentId = data["payment_intent"];
+    if (event.type === "payment_method.attached") {
+      const customerId = data["customer"];
 
-          const paymentIntent = await BillingService.getInstance()
-            .getStripe()
-            .paymentIntents.retrieve(paymentId);
+      const customer = (await BillingService.getInstance()
+        .getStripe()
+        .customers.retrieve(customerId, {
+          expand: ["data.subscriptions"]
+        })) as Stripe.Customer;
 
-          await BillingService.getInstance()
-            .getStripe()
-            .subscriptions.update(subscriptionId, {
-              default_payment_method: paymentIntent.payment_method as string
-            });
-        }
-        break;
+      const subscription = customer.subscriptions.data?.[0];
+
+      if (subscription) {
+        await BillingService.getInstance()
+          .getStripe()
+          .subscriptions.update(subscription.id, {
+            default_payment_method: data["id"]
+          });
+      }
     }
 
     res.send();

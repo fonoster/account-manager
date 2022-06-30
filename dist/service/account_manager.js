@@ -36,6 +36,71 @@ class AccountManagerServer {
             callback(error, null);
         }
     }
+    async addPaymentMethod(call, callback) {
+        try {
+            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const paymentMethodId = call.request.getPaymentMethodId();
+            if (!accessKeyId || !paymentMethodId) {
+                throw new Error("Missing required parameters");
+            }
+            const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
+            if (!customer)
+                throw new Error("Customer not found");
+            const paymentMethod = await billing_service_1.BillingService.getInstance().addPaymentMethod(paymentMethodId, customer);
+            if (!paymentMethod)
+                throw new Error("Payment method not added");
+            const response = new protos_1.AddPaymentMethodResponse().setPaymentMethod(new protos_1.PaymentMethod()
+                .setRef(paymentMethod.id)
+                .setCardBrand(paymentMethod.card.brand)
+                .setCardLastFour(paymentMethod.card.last4)
+                .setCardExpMonth(paymentMethod.card.exp_month)
+                .setCardExpYear(paymentMethod.card.exp_year));
+            callback(null, response);
+        }
+        catch (error) {
+            callback(error, null);
+        }
+    }
+    async removePaymentMethod(call, callback) {
+        try {
+            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const paymentMethodId = call.request.getPaymentMethodId();
+            if (!accessKeyId || !paymentMethodId) {
+                throw new Error("Missing required parameters");
+            }
+            const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
+            if (!customer)
+                throw new Error("Customer not found");
+            const paymentMethod = await billing_service_1.BillingService.getInstance().removePaymentMethod(paymentMethodId);
+            if (!paymentMethod)
+                throw new Error("Payment method not removed");
+            const response = new protos_1.RemovePaymentMethodResponse().setSuccess(true);
+            callback(null, response);
+        }
+        catch (error) {
+            callback(error, null);
+        }
+    }
+    async setDefaultPaymentMethod(call, callback) {
+        try {
+            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const paymentMethodId = call.request.getPaymentMethodId();
+            if (!accessKeyId || !paymentMethodId) {
+                throw new Error("Missing required parameters");
+            }
+            const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
+            if (!customer)
+                throw new Error("Customer not found");
+            const paymentMethod = await billing_service_1.BillingService.getInstance().setDefaultPaymentMethod(paymentMethodId, customer);
+            if (!paymentMethod)
+                throw new Error("Payment method not set");
+            const response = new protos_1.SetDefaultPaymentMethodResponse().setSuccess(true);
+            callback(null, response);
+        }
+        catch (error) {
+            callback(error, null);
+        }
+    }
     async changePlan(call, callback) {
         try {
             const accessKeyId = (0, core_1.getAccessKeyId)(call);
@@ -50,7 +115,13 @@ class AccountManagerServer {
             if (user.status && user.status !== "active") {
                 throw new Error(`You can't switch plans on a ${user.status.toLowerCase()} account. Please contact support.`);
             }
-            const { plan } = await billing_service_1.BillingService.getInstance().changePlan(customer, planRef);
+            const paymentMethods = await billing_service_1.BillingService.getInstance().listPaymentMethods(accessKeyId);
+            if (planRef !== "starter") {
+                if (!paymentMethods || !paymentMethods?.length) {
+                    throw new Error("Oops, you don't have any payment methods. Please add one to continue.");
+                }
+            }
+            const { plan } = await billing_service_1.BillingService.getInstance().changePlan(customer, planRef, paymentMethods?.[0]?.ref);
             if (!plan)
                 throw new Error("Plan not changed");
             await api_1.users.updateUser({ ref: accessKeyId, limiter: plan.ref });
@@ -126,7 +197,7 @@ class AccountManagerServer {
                 throw new Error("Missing required parameters");
             }
             const methods = await billing_service_1.BillingService.getInstance().listPaymentMethods(accessKeyId, paymentMethodType);
-            const response = new protos_1.ListPaymentMethodResponse().setPaymentMethodsList(methods.map((method) => new protos_1.ListPaymentMethodResponse.PaymentMethod()
+            const response = new protos_1.ListPaymentMethodResponse().setPaymentMethodsList(methods.map((method) => new protos_1.PaymentMethod()
                 .setRef(method.ref)
                 .setCardBrand(method.brand)
                 .setCardLastFour(method.last4)

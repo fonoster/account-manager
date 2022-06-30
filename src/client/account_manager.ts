@@ -19,15 +19,19 @@
 import {APIClient, ClientOptions} from "@fonoster/common";
 import {
   AccountManagerClient,
+  AddPaymentMethodRequest,
   ChangePlanRequest,
   GetPlanRequest,
   GetPublishableKeyRequest,
   ListInvoicesRequest,
   ListPaymentMethodRequest,
-  ListPlansRequest
+  ListPlansRequest,
+  RemovePaymentMethodRequest
 } from "../protos";
 import {
   IAccountManagerClient,
+  IAddPaymentMethodRequest,
+  IAddPaymentMethodResponse,
   IChangePlanRequest,
   IChangePlanResponse,
   IGetPlanRequest,
@@ -39,7 +43,9 @@ import {
   IListPaymentMethodsRequest,
   IListPaymentMethodsResponse,
   IListPlansRequest,
-  IListPlansResponse
+  IListPlansResponse,
+  IRemovePaymentMethodRequest,
+  IRemovePaymentMethodResponse
 } from "./types";
 import * as grpc from "@grpc/grpc-js";
 
@@ -138,6 +144,54 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).listPlans(
+        req,
+        this.getMeta(),
+        (err, res) => {
+          if (err) return reject(err);
+
+          resolve(res.toObject());
+        }
+      );
+    });
+  }
+
+  public async addPaymentMethod(
+    request: IAddPaymentMethodRequest
+  ): Promise<IAddPaymentMethodResponse> {
+    if (!request.paymentMethodId) {
+      throw new Error("Missing paymentMethodId");
+    }
+
+    const req = new AddPaymentMethodRequest().setPaymentMethodId(
+      request.paymentMethodId
+    );
+
+    return await new Promise((resolve, reject) => {
+      (this.service as AccountManagerClient).addPaymentMethod(
+        req,
+        this.getMeta(),
+        (err, res) => {
+          if (err) return reject(err);
+
+          resolve(res.toObject());
+        }
+      );
+    });
+  }
+
+  public async removePaymentMethod(
+    request: IRemovePaymentMethodRequest
+  ): Promise<IRemovePaymentMethodResponse> {
+    if (!request.paymentMethodId) {
+      throw new Error("Missing paymentMethodId");
+    }
+
+    const req = new RemovePaymentMethodRequest().setPaymentMethodId(
+      request.paymentMethodId
+    );
+
+    return await new Promise((resolve, reject) => {
+      (this.service as AccountManagerClient).removePaymentMethod(
         req,
         this.getMeta(),
         (err, res) => {

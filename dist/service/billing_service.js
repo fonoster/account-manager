@@ -113,7 +113,7 @@ class BillingService {
         const prices = await this.listPlans();
         return prices.find((price) => price.ref === ref);
     }
-    async changePlan(customer, planRef) {
+    async changePlan(customer, planRef, paymentMethodId) {
         const plan = await this.getPlan(planRef);
         if (!plan)
             throw new Error("Plan not found");
@@ -127,14 +127,15 @@ class BillingService {
                         id: subscription.items.data[0].id,
                         price: plan.externalRef
                     }
-                ]
+                ],
+                default_payment_method: paymentMethodId
             });
         }
         else {
             subscription = await this.stripe.subscriptions.create({
                 customer: customer.ref,
                 items: [{ price: plan.externalRef }],
-                payment_behavior: "default_incomplete",
+                default_payment_method: paymentMethodId,
                 expand: ["latest_invoice.payment_intent"]
             });
         }
@@ -168,6 +169,33 @@ class BillingService {
             currency: invoice.currency,
             createdAt: invoice.created
         }));
+    }
+    async addPaymentMethod(paymentMethodId, customer) {
+        const paymentMethod = await this.stripe.paymentMethods.attach(paymentMethodId, {
+            customer: customer.ref
+        });
+        const subscription = customer.subscriptions?.[0];
+        if (subscription) {
+            await this.stripe.subscriptions.update(subscription.id, {
+                default_payment_method: paymentMethod.id
+            });
+        }
+        return paymentMethod;
+    }
+    async setDefaultPaymentMethod(paymentMethodId, customer) {
+        const paymentMethod = await this.stripe.paymentMethods.retrieve(paymentMethodId);
+        if (!paymentMethod)
+            throw new Error("Payment method not found");
+        const subscription = customer.subscriptions?.[0];
+        if (!subscription)
+            throw new Error("Subscription not found");
+        await this.stripe.subscriptions.update(subscription.id, {
+            default_payment_method: paymentMethod.id
+        });
+        return paymentMethod;
+    }
+    async removePaymentMethod(paymentMethodId) {
+        return this.stripe.paymentMethods.detach(paymentMethodId);
     }
     async listPaymentMethods(accessKeyId, type = "card") {
         const customer = await this.getCustomer(accessKeyId);

@@ -17,6 +17,8 @@
  * limitations under the License.
  */
 import {
+  AddPaymentMethodRequest,
+  AddPaymentMethodResponse,
   ChangePlanRequest,
   ChangePlanResponse,
   GetPlanRequest,
@@ -28,7 +30,9 @@ import {
   ListPaymentMethodRequest,
   ListPaymentMethodResponse,
   ListPlansRequest,
-  ListPlansResponse
+  ListPlansResponse,
+  RemovePaymentMethodRequest,
+  RemovePaymentMethodResponse
 } from "../protos";
 
 export type IGetPublishableKeyRequest = GetPublishableKeyRequest.AsObject;
@@ -49,6 +53,12 @@ export type IListPaymentMethodsResponse = ListPaymentMethodResponse.AsObject;
 export type IListInvoicesRequest = ListInvoicesRequest.AsObject;
 export type IListInvoicesResponse = ListInvoicesResponse.AsObject;
 
+export type IAddPaymentMethodRequest = AddPaymentMethodRequest.AsObject;
+export type IAddPaymentMethodResponse = AddPaymentMethodResponse.AsObject;
+
+export type IRemovePaymentMethodRequest = RemovePaymentMethodRequest.AsObject;
+export type IRemovePaymentMethodResponse = RemovePaymentMethodResponse.AsObject;
+
 export interface IAccountManagerClient {
   getPublishableKey(
     request: IGetPublishableKeyRequest
@@ -59,5 +69,11 @@ export interface IAccountManagerClient {
   listPaymentMethods(
     request: IListPaymentMethodsRequest
   ): Promise<IListPaymentMethodsResponse>;
+  addPaymentMethod(
+    request: IAddPaymentMethodRequest
+  ): Promise<IAddPaymentMethodResponse>;
+  removePaymentMethod(
+    request: IRemovePaymentMethodRequest
+  ): Promise<IRemovePaymentMethodResponse>;
   listInvoices(request: IListInvoicesRequest): Promise<IListInvoicesResponse>;
 }

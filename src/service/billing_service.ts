@@ -138,7 +138,11 @@ export class BillingService {
     return prices.find((price) => price.ref === ref);
   }
 
-  public async changePlan(customer: Customer, planRef: string) {
+  public async changePlan(
+    customer: Customer,
+    planRef: string,
+    paymentMethodId?: string
+  ) {
     const plan = await this.getPlan(planRef);
 
     if (!plan) throw new Error("Plan not found");
@@ -154,13 +158,14 @@ export class BillingService {
             id: subscription.items.data[0].id,
             price: plan.externalRef
           }
-        ]
+        ],
+        default_payment_method: paymentMethodId
       });
     } else {
       subscription = await this.stripe.subscriptions.create({
         customer: customer.ref,
         items: [{price: plan.externalRef}],
-        payment_behavior: "default_incomplete",
+        default_payment_method: paymentMethodId,
         expand: ["latest_invoice.payment_intent"]
       });
     }
@@ -201,6 +206,50 @@ export class BillingService {
       currency: invoice.currency,
       createdAt: invoice.created
     }));
+  }
+
+  public async addPaymentMethod(paymentMethodId: string, customer: Customer) {
+    const paymentMethod = await this.stripe.paymentMethods.attach(
+      paymentMethodId,
+      {
+        customer: customer.ref
+      }
+    );
+
+    const subscription = customer.subscriptions?.[0];
+
+    if (subscription) {
+      await this.stripe.subscriptions.update(subscription.id, {
+        default_payment_method: paymentMethod.id
+      });
+    }
+
+    return paymentMethod;
+  }
+
+  public async setDefaultPaymentMethod(
+    paymentMethodId: string,
+    customer: Customer
+  ) {
+    const paymentMethod = await this.stripe.paymentMethods.retrieve(
+      paymentMethodId
+    );
+
+    if (!paymentMethod) throw new Error("Payment method not found");
+
+    const subscription = customer.subscriptions?.[0];
+
+    if (!subscription) throw new Error("Subscription not found");
+
+    await this.stripe.subscriptions.update(subscription.id, {
+      default_payment_method: paymentMethod.id
+    });
+
+    return paymentMethod;
+  }
+
+  public async removePaymentMethod(paymentMethodId: string) {
+    return this.stripe.paymentMethods.detach(paymentMethodId);
   }
 
   public async listPaymentMethods(accessKeyId: string, type = "card") {

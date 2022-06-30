@@ -23,6 +23,8 @@ import type {
   UntypedHandleCall
 } from "@grpc/grpc-js";
 import {
+  AddPaymentMethodRequest,
+  AddPaymentMethodResponse,
   ChangePlanRequest,
   ChangePlanResponse,
   GetPlanRequest,
@@ -36,7 +38,12 @@ import {
   ListPaymentMethodResponse,
   ListPlansRequest,
   ListPlansResponse,
-  Plan
+  PaymentMethod,
+  Plan,
+  RemovePaymentMethodRequest,
+  RemovePaymentMethodResponse,
+  SetDefaultPaymentMethodRequest,
+  SetDefaultPaymentMethodResponse
 } from "../protos";
 import {users} from "./api";
 import {BillingService} from "./billing_service";
@@ -58,6 +65,117 @@ export class AccountManagerServer implements IAccountManagerServer {
       const response = new GetPublishableKeyResponse()
         .setClientRef(call.request.getClientRef())
         .setPublishableKey(publishableKey);
+
+      callback(null, response);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  public async addPaymentMethod(
+    call: ServerUnaryCall<AddPaymentMethodRequest, AddPaymentMethodResponse>,
+    callback: ICallback<AddPaymentMethodResponse>
+  ) {
+    try {
+      const accessKeyId = getAccessKeyId(call);
+      const paymentMethodId = call.request.getPaymentMethodId();
+
+      if (!accessKeyId || !paymentMethodId) {
+        throw new Error("Missing required parameters");
+      }
+
+      const customer = await BillingService.getInstance().getCustomer(
+        accessKeyId
+      );
+
+      if (!customer) throw new Error("Customer not found");
+
+      const paymentMethod = await BillingService.getInstance().addPaymentMethod(
+        paymentMethodId,
+        customer
+      );
+
+      if (!paymentMethod) throw new Error("Payment method not added");
+
+      const response = new AddPaymentMethodResponse().setPaymentMethod(
+        new PaymentMethod()
+          .setRef(paymentMethod.id)
+          .setCardBrand(paymentMethod.card.brand)
+          .setCardLastFour(paymentMethod.card.last4)
+          .setCardExpMonth(paymentMethod.card.exp_month)
+          .setCardExpYear(paymentMethod.card.exp_year)
+      );
+
+      callback(null, response);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  public async removePaymentMethod(
+    call: ServerUnaryCall<
+      RemovePaymentMethodRequest,
+      RemovePaymentMethodResponse
+    >,
+    callback: ICallback<RemovePaymentMethodResponse>
+  ) {
+    try {
+      const accessKeyId = getAccessKeyId(call);
+      const paymentMethodId = call.request.getPaymentMethodId();
+
+      if (!accessKeyId || !paymentMethodId) {
+        throw new Error("Missing required parameters");
+      }
+
+      const customer = await BillingService.getInstance().getCustomer(
+        accessKeyId
+      );
+
+      if (!customer) throw new Error("Customer not found");
+
+      const paymentMethod =
+        await BillingService.getInstance().removePaymentMethod(paymentMethodId);
+
+      if (!paymentMethod) throw new Error("Payment method not removed");
+
+      const response = new RemovePaymentMethodResponse().setSuccess(true);
+
+      callback(null, response);
+    } catch (error) {
+      callback(error, null);
+    }
+  }
+
+  public async setDefaultPaymentMethod(
+    call: ServerUnaryCall<
+      SetDefaultPaymentMethodRequest,
+      SetDefaultPaymentMethodResponse
+    >,
+    callback: ICallback<SetDefaultPaymentMethodResponse>
+  ) {
+    try {
+      const accessKeyId = getAccessKeyId(call);
+      const paymentMethodId = call.request.getPaymentMethodId();
+
+      if (!accessKeyId || !paymentMethodId) {
+        throw new Error("Missing required parameters");
+      }
+
+      const customer = await BillingService.getInstance().getCustomer(
+        accessKeyId
+      );
+
+      if (!customer) throw new Error("Customer not found");
+
+      const paymentMethod =
+        await BillingService.getInstance().setDefaultPaymentMethod(
+          paymentMethodId,
+          customer
+        );
+
+      if (!paymentMethod) throw new Error("Payment method not set");
+
+      const response = new SetDefaultPaymentMethodResponse().setSuccess(true);
 
       callback(null, response);
     } catch (error) {
@@ -90,9 +208,21 @@ export class AccountManagerServer implements IAccountManagerServer {
         );
       }
 
+      const paymentMethods =
+        await BillingService.getInstance().listPaymentMethods(accessKeyId);
+
+      if (planRef !== "starter") {
+        if (!paymentMethods || !paymentMethods?.length) {
+          throw new Error(
+            "Oops, you don't have any payment methods. Please add one to continue."
+          );
+        }
+      }
+
       const {plan} = await BillingService.getInstance().changePlan(
         customer,
-        planRef
+        planRef,
+        paymentMethods?.[0]?.ref
       );
 
       if (!plan) throw new Error("Plan not changed");
@@ -203,7 +333,7 @@ export class AccountManagerServer implements IAccountManagerServer {
 
       const response = new ListPaymentMethodResponse().setPaymentMethodsList(
         methods.map((method) =>
-          new ListPaymentMethodResponse.PaymentMethod()
+          new PaymentMethod()
             .setRef(method.ref)
             .setCardBrand(method.brand)
             .setCardLastFour(method.last4)

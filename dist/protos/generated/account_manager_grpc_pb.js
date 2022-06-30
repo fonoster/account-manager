@@ -4,6 +4,28 @@
 var grpc = require('@grpc/grpc-js');
 var account_manager_pb = require('./account_manager_pb.js');
 
+function serialize_fonoster_account_manager_v1beta1_AddPaymentMethodRequest(arg) {
+  if (!(arg instanceof account_manager_pb.AddPaymentMethodRequest)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.AddPaymentMethodRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_AddPaymentMethodRequest(buffer_arg) {
+  return account_manager_pb.AddPaymentMethodRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_fonoster_account_manager_v1beta1_AddPaymentMethodResponse(arg) {
+  if (!(arg instanceof account_manager_pb.AddPaymentMethodResponse)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.AddPaymentMethodResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_AddPaymentMethodResponse(buffer_arg) {
+  return account_manager_pb.AddPaymentMethodResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_fonoster_account_manager_v1beta1_ChangePlanRequest(arg) {
   if (!(arg instanceof account_manager_pb.ChangePlanRequest)) {
     throw new Error('Expected argument of type fonoster.account_manager.v1beta1.ChangePlanRequest');
@@ -136,6 +158,50 @@ function deserialize_fonoster_account_manager_v1beta1_ListPlansResponse(buffer_a
   return account_manager_pb.ListPlansResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_fonoster_account_manager_v1beta1_RemovePaymentMethodRequest(arg) {
+  if (!(arg instanceof account_manager_pb.RemovePaymentMethodRequest)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.RemovePaymentMethodRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_RemovePaymentMethodRequest(buffer_arg) {
+  return account_manager_pb.RemovePaymentMethodRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_fonoster_account_manager_v1beta1_RemovePaymentMethodResponse(arg) {
+  if (!(arg instanceof account_manager_pb.RemovePaymentMethodResponse)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.RemovePaymentMethodResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_RemovePaymentMethodResponse(buffer_arg) {
+  return account_manager_pb.RemovePaymentMethodResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest(arg) {
+  if (!(arg instanceof account_manager_pb.SetDefaultPaymentMethodRequest)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.SetDefaultPaymentMethodRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest(buffer_arg) {
+  return account_manager_pb.SetDefaultPaymentMethodRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse(arg) {
+  if (!(arg instanceof account_manager_pb.SetDefaultPaymentMethodResponse)) {
+    throw new Error('Expected argument of type fonoster.account_manager.v1beta1.SetDefaultPaymentMethodResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse(buffer_arg) {
+  return account_manager_pb.SetDefaultPaymentMethodResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 var AccountManagerService = exports.AccountManagerService = {
   getPublishableKey: {
@@ -181,6 +247,39 @@ var AccountManagerService = exports.AccountManagerService = {
     requestDeserialize: deserialize_fonoster_account_manager_v1beta1_ListPlansRequest,
     responseSerialize: serialize_fonoster_account_manager_v1beta1_ListPlansResponse,
     responseDeserialize: deserialize_fonoster_account_manager_v1beta1_ListPlansResponse,
+  },
+  addPaymentMethod: {
+    path: '/fonoster.account_manager.v1beta1.AccountManager/AddPaymentMethod',
+    requestStream: false,
+    responseStream: false,
+    requestType: account_manager_pb.AddPaymentMethodRequest,
+    responseType: account_manager_pb.AddPaymentMethodResponse,
+    requestSerialize: serialize_fonoster_account_manager_v1beta1_AddPaymentMethodRequest,
+    requestDeserialize: deserialize_fonoster_account_manager_v1beta1_AddPaymentMethodRequest,
+    responseSerialize: serialize_fonoster_account_manager_v1beta1_AddPaymentMethodResponse,
+    responseDeserialize: deserialize_fonoster_account_manager_v1beta1_AddPaymentMethodResponse,
+  },
+  setDefaultPaymentMethod: {
+    path: '/fonoster.account_manager.v1beta1.AccountManager/SetDefaultPaymentMethod',
+    requestStream: false,
+    responseStream: false,
+    requestType: account_manager_pb.SetDefaultPaymentMethodRequest,
+    responseType: account_manager_pb.SetDefaultPaymentMethodResponse,
+    requestSerialize: serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest,
+    requestDeserialize: deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodRequest,
+    responseSerialize: serialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse,
+    responseDeserialize: deserialize_fonoster_account_manager_v1beta1_SetDefaultPaymentMethodResponse,
+  },
+  removePaymentMethod: {
+    path: '/fonoster.account_manager.v1beta1.AccountManager/RemovePaymentMethod',
+    requestStream: false,
+    responseStream: false,
+    requestType: account_manager_pb.RemovePaymentMethodRequest,
+    responseType: account_manager_pb.RemovePaymentMethodResponse,
+    requestSerialize: serialize_fonoster_account_manager_v1beta1_RemovePaymentMethodRequest,
+    requestDeserialize: deserialize_fonoster_account_manager_v1beta1_RemovePaymentMethodRequest,
+    responseSerialize: serialize_fonoster_account_manager_v1beta1_RemovePaymentMethodResponse,
+    responseDeserialize: deserialize_fonoster_account_manager_v1beta1_RemovePaymentMethodResponse,
   },
   listPaymentMethods: {
     path: '/fonoster.account_manager.v1beta1.AccountManager/ListPaymentMethods',

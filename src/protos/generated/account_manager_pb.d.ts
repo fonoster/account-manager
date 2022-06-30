@@ -41,6 +41,38 @@ export namespace Plan {
     }
 }
 
+export class PaymentMethod extends jspb.Message { 
+    getRef(): string;
+    setRef(value: string): PaymentMethod;
+    getCardBrand(): string;
+    setCardBrand(value: string): PaymentMethod;
+    getCardLastFour(): string;
+    setCardLastFour(value: string): PaymentMethod;
+    getCardExpMonth(): number;
+    setCardExpMonth(value: number): PaymentMethod;
+    getCardExpYear(): number;
+    setCardExpYear(value: number): PaymentMethod;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): PaymentMethod.AsObject;
+    static toObject(includeInstance: boolean, msg: PaymentMethod): PaymentMethod.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: PaymentMethod, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): PaymentMethod;
+    static deserializeBinaryFromReader(message: PaymentMethod, reader: jspb.BinaryReader): PaymentMethod;
+}
+
+export namespace PaymentMethod {
+    export type AsObject = {
+        ref: string,
+        cardBrand: string,
+        cardLastFour: string,
+        cardExpMonth: number,
+        cardExpYear: number,
+    }
+}
+
 export class ChangePlanRequest extends jspb.Message { 
     getPlanRef(): string;
     setPlanRef(value: string): ChangePlanRequest;
@@ -197,9 +229,9 @@ export namespace ListPaymentMethodRequest {
 
 export class ListPaymentMethodResponse extends jspb.Message { 
     clearPaymentMethodsList(): void;
-    getPaymentMethodsList(): Array<ListPaymentMethodResponse.PaymentMethod>;
-    setPaymentMethodsList(value: Array<ListPaymentMethodResponse.PaymentMethod>): ListPaymentMethodResponse;
-    addPaymentMethods(value?: ListPaymentMethodResponse.PaymentMethod, index?: number): ListPaymentMethodResponse.PaymentMethod;
+    getPaymentMethodsList(): Array<PaymentMethod>;
+    setPaymentMethodsList(value: Array<PaymentMethod>): ListPaymentMethodResponse;
+    addPaymentMethods(value?: PaymentMethod, index?: number): PaymentMethod;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ListPaymentMethodResponse.AsObject;
@@ -213,42 +245,8 @@ export class ListPaymentMethodResponse extends jspb.Message {
 
 export namespace ListPaymentMethodResponse {
     export type AsObject = {
-        paymentMethodsList: Array<ListPaymentMethodResponse.PaymentMethod.AsObject>,
+        paymentMethodsList: Array<PaymentMethod.AsObject>,
     }
-
-
-    export class PaymentMethod extends jspb.Message { 
-        getRef(): string;
-        setRef(value: string): PaymentMethod;
-        getCardBrand(): string;
-        setCardBrand(value: string): PaymentMethod;
-        getCardLastFour(): string;
-        setCardLastFour(value: string): PaymentMethod;
-        getCardExpMonth(): number;
-        setCardExpMonth(value: number): PaymentMethod;
-        getCardExpYear(): number;
-        setCardExpYear(value: number): PaymentMethod;
-
-        serializeBinary(): Uint8Array;
-        toObject(includeInstance?: boolean): PaymentMethod.AsObject;
-        static toObject(includeInstance: boolean, msg: PaymentMethod): PaymentMethod.AsObject;
-        static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-        static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-        static serializeBinaryToWriter(message: PaymentMethod, writer: jspb.BinaryWriter): void;
-        static deserializeBinary(bytes: Uint8Array): PaymentMethod;
-        static deserializeBinaryFromReader(message: PaymentMethod, reader: jspb.BinaryReader): PaymentMethod;
-    }
-
-    export namespace PaymentMethod {
-        export type AsObject = {
-            ref: string,
-            cardBrand: string,
-            cardLastFour: string,
-            cardExpMonth: number,
-            cardExpYear: number,
-        }
-    }
-
 }
 
 export class ListInvoicesRequest extends jspb.Message { 
@@ -367,5 +365,128 @@ export namespace GetPublishableKeyResponse {
     export type AsObject = {
         clientRef: string,
         publishableKey: string,
+    }
+}
+
+export class AddPaymentMethodRequest extends jspb.Message { 
+    getPaymentMethodId(): string;
+    setPaymentMethodId(value: string): AddPaymentMethodRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): AddPaymentMethodRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: AddPaymentMethodRequest): AddPaymentMethodRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: AddPaymentMethodRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): AddPaymentMethodRequest;
+    static deserializeBinaryFromReader(message: AddPaymentMethodRequest, reader: jspb.BinaryReader): AddPaymentMethodRequest;
+}
+
+export namespace AddPaymentMethodRequest {
+    export type AsObject = {
+        paymentMethodId: string,
+    }
+}
+
+export class AddPaymentMethodResponse extends jspb.Message { 
+
+    hasPaymentMethod(): boolean;
+    clearPaymentMethod(): void;
+    getPaymentMethod(): PaymentMethod | undefined;
+    setPaymentMethod(value?: PaymentMethod): AddPaymentMethodResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): AddPaymentMethodResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: AddPaymentMethodResponse): AddPaymentMethodResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: AddPaymentMethodResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): AddPaymentMethodResponse;
+    static deserializeBinaryFromReader(message: AddPaymentMethodResponse, reader: jspb.BinaryReader): AddPaymentMethodResponse;
+}
+
+export namespace AddPaymentMethodResponse {
+    export type AsObject = {
+        paymentMethod?: PaymentMethod.AsObject,
+    }
+}
+
+export class RemovePaymentMethodRequest extends jspb.Message { 
+    getPaymentMethodId(): string;
+    setPaymentMethodId(value: string): RemovePaymentMethodRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): RemovePaymentMethodRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: RemovePaymentMethodRequest): RemovePaymentMethodRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: RemovePaymentMethodRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): RemovePaymentMethodRequest;
+    static deserializeBinaryFromReader(message: RemovePaymentMethodRequest, reader: jspb.BinaryReader): RemovePaymentMethodRequest;
+}
+
+export namespace RemovePaymentMethodRequest {
+    export type AsObject = {
+        paymentMethodId: string,
+    }
+}
+
+export class RemovePaymentMethodResponse extends jspb.Message { 
+    getSuccess(): boolean;
+    setSuccess(value: boolean): RemovePaymentMethodResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): RemovePaymentMethodResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: RemovePaymentMethodResponse): RemovePaymentMethodResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: RemovePaymentMethodResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): RemovePaymentMethodResponse;
+    static deserializeBinaryFromReader(message: RemovePaymentMethodResponse, reader: jspb.BinaryReader): RemovePaymentMethodResponse;
+}
+
+export namespace RemovePaymentMethodResponse {
+    export type AsObject = {
+        success: boolean,
+    }
+}
+
+export class SetDefaultPaymentMethodRequest extends jspb.Message { 
+    getPaymentMethodId(): string;
+    setPaymentMethodId(value: string): SetDefaultPaymentMethodRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetDefaultPaymentMethodRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: SetDefaultPaymentMethodRequest): SetDefaultPaymentMethodRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetDefaultPaymentMethodRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetDefaultPaymentMethodRequest;
+    static deserializeBinaryFromReader(message: SetDefaultPaymentMethodRequest, reader: jspb.BinaryReader): SetDefaultPaymentMethodRequest;
+}
+
+export namespace SetDefaultPaymentMethodRequest {
+    export type AsObject = {
+        paymentMethodId: string,
+    }
+}
+
+export class SetDefaultPaymentMethodResponse extends jspb.Message { 
+    getSuccess(): boolean;
+    setSuccess(value: boolean): SetDefaultPaymentMethodResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): SetDefaultPaymentMethodResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: SetDefaultPaymentMethodResponse): SetDefaultPaymentMethodResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: SetDefaultPaymentMethodResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): SetDefaultPaymentMethodResponse;
+    static deserializeBinaryFromReader(message: SetDefaultPaymentMethodResponse, reader: jspb.BinaryReader): SetDefaultPaymentMethodResponse;
+}
+
+export namespace SetDefaultPaymentMethodResponse {
+    export type AsObject = {
+        success: boolean,
     }
 }

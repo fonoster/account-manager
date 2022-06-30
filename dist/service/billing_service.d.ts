@@ -41,7 +41,7 @@ export declare class BillingService {
         currency: string;
         recurringType: Stripe.Price.Recurring.Interval;
     }>;
-    changePlan(customer: Customer, planRef: string): Promise<{
+    changePlan(customer: Customer, planRef: string, paymentMethodId?: string): Promise<{
         subscription: Stripe.Subscription;
         plan: {
             ref: string;
@@ -61,6 +61,9 @@ export declare class BillingService {
         currency: string;
         createdAt: number;
     }[]>;
+    addPaymentMethod(paymentMethodId: string, customer: Customer): Promise<Stripe.Response<Stripe.PaymentMethod>>;
+    setDefaultPaymentMethod(paymentMethodId: string, customer: Customer): Promise<Stripe.Response<Stripe.PaymentMethod>>;
+    removePaymentMethod(paymentMethodId: string): Promise<Stripe.Response<Stripe.PaymentMethod>>;
     listPaymentMethods(accessKeyId: string, type?: string): Promise<{
         ref: string;
         brand: string;
