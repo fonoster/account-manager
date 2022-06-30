@@ -31,8 +31,8 @@ export const webhook = async (req: Request, res: Response) => {
      */
     const data = event.data.object as unknown as any;
 
-    logger.info(`Webhook received: ${event.type}`);
-    logger.info(`Webhook data: ${JSON.stringify(data)}`);
+    logger.verbose(`Webhook received: ${event.type}`);
+    logger.verbose(`Webhook data: ${JSON.stringify(data)}`);
 
     switch (event.type) {
       case "invoice.payment_succeeded":
