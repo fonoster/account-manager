@@ -1,15 +1,37 @@
+/*
+ * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
+ * http://github.com/fonoster
+ *
+ * This file is part of account-manager
+ *
+ * Licensed under the MIT License (the "License");
+ * you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ *
+ *    https://opensource.org/licenses/MIT
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import {APIClient, ClientOptions} from "@fonoster/common";
 import {
   AccountManagerClient,
+  AddPaymentMethodRequest,
   ChangePlanRequest,
   GetPlanRequest,
   GetPublishableKeyRequest,
   ListInvoicesRequest,
   ListPaymentMethodRequest,
-  ListPlansRequest
+  ListPlansRequest,
+  RemovePaymentMethodRequest
 } from "../protos";
 import {
   IAccountManagerClient,
+  IAddPaymentMethodRequest,
+  IAddPaymentMethodResponse,
   IChangePlanRequest,
   IChangePlanResponse,
   IGetPlanRequest,
@@ -21,7 +43,9 @@ import {
   IListPaymentMethodsRequest,
   IListPaymentMethodsResponse,
   IListPlansRequest,
-  IListPlansResponse
+  IListPlansResponse,
+  IRemovePaymentMethodRequest,
+  IRemovePaymentMethodResponse
 } from "./types";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const grpc = require("@grpc/grpc-js");
@@ -136,6 +160,54 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).listPlans(
+        req,
+        this.getMeta(),
+        (err, res) => {
+          if (err) return reject(err);
+
+          resolve(res.toObject());
+        }
+      );
+    });
+  }
+
+  public async addPaymentMethod(
+    request: IAddPaymentMethodRequest
+  ): Promise<IAddPaymentMethodResponse> {
+    if (!request.paymentMethodId) {
+      throw new Error("Missing paymentMethodId");
+    }
+
+    const req = new AddPaymentMethodRequest().setPaymentMethodId(
+      request.paymentMethodId
+    );
+
+    return await new Promise((resolve, reject) => {
+      (this.service as AccountManagerClient).addPaymentMethod(
+        req,
+        this.getMeta(),
+        (err, res) => {
+          if (err) return reject(err);
+
+          resolve(res.toObject());
+        }
+      );
+    });
+  }
+
+  public async removePaymentMethod(
+    request: IRemovePaymentMethodRequest
+  ): Promise<IRemovePaymentMethodResponse> {
+    if (!request.paymentMethodId) {
+      throw new Error("Missing paymentMethodId");
+    }
+
+    const req = new RemovePaymentMethodRequest().setPaymentMethodId(
+      request.paymentMethodId
+    );
+
+    return await new Promise((resolve, reject) => {
+      (this.service as AccountManagerClient).removePaymentMethod(
         req,
         this.getMeta(),
         (err, res) => {

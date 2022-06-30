@@ -203,6 +203,16 @@ export class BillingService {
     }));
   }
 
+  public async addPaymentMethod(paymentMethodId: string, customer: string) {
+    return this.stripe.paymentMethods.attach(paymentMethodId, {
+      customer
+    });
+  }
+
+  public async removePaymentMethod(paymentMethodId: string) {
+    return this.stripe.paymentMethods.detach(paymentMethodId);
+  }
+
   public async listPaymentMethods(accessKeyId: string, type = "card") {
     const customer = await this.getCustomer(accessKeyId);
 

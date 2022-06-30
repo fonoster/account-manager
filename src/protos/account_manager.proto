@@ -11,6 +11,14 @@ message Plan {
   string recurring_type = 6;
 }
 
+message PaymentMethod {
+  string ref = 1;
+  string card_brand = 2;
+  string card_last_four = 3;
+  int32 card_exp_month = 4;
+  int32 card_exp_year = 5;
+}
+
 message ChangePlanRequest {
   string plan_ref = 1;
 }
@@ -40,13 +48,6 @@ message ListPaymentMethodRequest {
 }
 
 message ListPaymentMethodResponse {
-  message PaymentMethod {
-    string ref = 1;
-    string card_brand = 2;
-    string card_last_four = 3;
-    int32 card_exp_month = 4;
-    int32 card_exp_year = 5;
-  }
   repeated PaymentMethod payment_methods = 1;
 }
 
@@ -73,12 +74,32 @@ message GetPublishableKeyResponse {
   string publishable_key = 2;
 }
 
+message AddPaymentMethodRequest {
+  string payment_method_id = 1;
+}
+
+message AddPaymentMethodResponse {
+  PaymentMethod payment_method = 1;
+}
+
+message RemovePaymentMethodRequest {
+  string payment_method_id = 1;
+}
+
+message RemovePaymentMethodResponse {
+  bool success = 1;
+}
+
 service AccountManager {
   rpc GetPublishableKey(GetPublishableKeyRequest)
     returns (GetPublishableKeyResponse);
   rpc ChangePlan (ChangePlanRequest) returns (ChangePlanResponse) {}
   rpc GetPlan (GetPlanRequest) returns (GetPlanResponse) {}
   rpc ListPlans (ListPlansRequest) returns (ListPlansResponse) {}
+  rpc AddPaymentMethod (AddPaymentMethodRequest)
+    returns (AddPaymentMethodResponse) {}
+  rpc RemovePaymentMethod (RemovePaymentMethodRequest)
+    returns (RemovePaymentMethodResponse) {}
   rpc ListPaymentMethods (ListPaymentMethodRequest)
     returns (ListPaymentMethodResponse) {}
   rpc ListInvoices (ListInvoicesRequest) returns (ListInvoicesResponse) {}
