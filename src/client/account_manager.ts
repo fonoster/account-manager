@@ -77,16 +77,7 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
    */
   constructor(options?: ClientOptions) {
     super(AccountManagerClient, options);
-
     super.init();
-
-    /**
-     * @todo Temporal workaround to allow connection to the server
-     */
-    this.service = new this.ServiceClient(
-      this.options.endpoint || process.env.APISERVER_ENDPOINT,
-      grpc.credentials.createInsecure()
-    );
   }
 
   public async getPublishableKey(
