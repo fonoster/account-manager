@@ -1,8 +1,3 @@
-import {Request, Response} from "express";
-import logger from "@fonoster/logger";
-import {BillingService} from "./billing_service";
-import Stripe from "stripe";
-
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
  * http://github.com/fonoster
@@ -21,6 +16,11 @@ import Stripe from "stripe";
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import {Request, Response} from "express";
+import logger from "@fonoster/logger";
+import {BillingService} from "./billing_service";
+import Stripe from "stripe";
+
 export const webhook = async (req: Request, res: Response) => {
   try {
     const signature = req.headers["stripe-signature"] as string;

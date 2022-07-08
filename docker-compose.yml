@@ -4,7 +4,7 @@ networks:
   fonoster:
 
 services:
-  account-manager-grpc:
+  account-manager:
     build:
       context: .  
     image: fonoster/account-manager:latest
@@ -17,13 +17,20 @@ services:
       - 50052:50052
     expose:
       - 50052
+      - 3000
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.account-manager-grpc.entrypoints=internal,websecure"
-      - "traefik.http.routers.account-manager-grpc.rule=PathPrefix(`/fonoster.account_manager.v1beta1`)"
-      - "traefik.http.services.account-manager-grpc.loadbalancer.server.scheme=h2c"
-      - "traefik.http.services.account-manager-grpc.loadbalancer.server.port=50052"
+      - traefik.enable=true
+      - traefik.http.routers.account-manager-grpc.entrypoints=internal,websecure
+      - traefik.http.routers.account-manager-grpc.rule=PathPrefix(`/fonoster.account_manager.v1beta1`)
+      - traefik.http.routers.account-manager-grpc.service=account-manager-grpc
+      - traefik.http.services.account-manager-grpc.loadbalancer.server.port=50052
+      - traefik.http.services.account-manager-grpc.loadbalancer.server.scheme=h2c
+      - traefik.http.routers.account-manager-http.entrypoints=internal,websecure
+      - traefik.http.routers.account-manager-http.rule=Host(`localhost`) && PathPrefix(`/webhook`)
+      - traefik.http.routers.account-manager-http.service=account-manager-http
+      - traefik.http.services.account-manager-http.loadbalancer.server.port=3000
     environment:
+      #- APISERVER_ENDPOINT
       - STRIPE_SECRET_KEY
       - STRIPE_PUBLISHABLE_KEY 
       - STRIPE_WEBHOOK_SECRET
@@ -31,31 +38,3 @@ services:
       - LOGS_TRANSPORT
     networks:
       fonoster:
-
-  # We need a second instance to avoid collissions with grpc
-  account-manager-webhook:
-    build:
-      context: .  
-    image: fonoster/account-manager:latest
-    # Uncomment the following line when running at in Fonoster
-    #extends:
-    #  file: api-common.yml
-    #  service: common    
-    restart: ${RESTART_POLICY}
-    ports:
-      - 3000:3000
-    expose:
-      - 3000
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.account-manager-webhook.entrypoints=websecure"
-      - "traefik.http.routers.account-manager-webhook.rule=Host(`${LETSENCRYPT_DOMAIN}`) && PathPrefix(`/webhook`)"
-      - "traefik.http.services.account-manager-webhook.loadbalancer.server.port=3000"      
-    environment:
-      - STRIPE_SECRET_KEY
-      - STRIPE_PUBLISHABLE_KEY
-      - STRIPE_WEBHOOK_SECRET
-      - LOGS_LEVEL
-      - LOGS_TRANSPORT
-    networks:
-      fonoster
