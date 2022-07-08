@@ -1,0 +1,98 @@
+diff --git a/node_modules/@fonoster/users/dist/client/users.js b/node_modules/@fonoster/users/dist/client/users.js
+index 14ea413..c028f92 100644
+--- a/node_modules/@fonoster/users/dist/client/users.js
++++ b/node_modules/@fonoster/users/dist/client/users.js
+@@ -28,7 +28,6 @@ const users_pb_1 = __importDefault(require("../service/protos/users_pb"));
+ exports.UsersPB = users_pb_1.default;
+ const common_pb_1 = __importDefault(require("../service/protos/common_pb"));
+ exports.CommonPB = common_pb_1.default;
+-const grpc_promise_1 = require("grpc-promise");
+ /**
+  * @classdesc Use Fonoster Users, a capability of Fonoster,
+  * to create, update, get and delete Users. Users requires of a
+@@ -62,7 +61,6 @@ class Users extends common_1.APIClient {
+     constructor(options) {
+         super(users_grpc_pb_1.UsersClient, options);
+         super.init();
+-        (0, grpc_promise_1.promisifyAll)(super.getService(), { metadata: super.getMeta() });
+     }
+     /**
+      * Return a list of Users.
+@@ -151,20 +149,20 @@ class Users extends common_1.APIClient {
+      * }).catch(e => console.error(e))   // an error occurred
+      */
+     async getUser(ref) {
+-        const request = new users_pb_1.default.GetUserRequest();
+-        request.setRef(ref);
+-        const res = await super.getService().getUser().sendMessage(request);
+-        return {
+-            ref: res.getRef(),
+-            accessKeyId: res.getAccessKeyId(),
+-            email: res.getEmail(),
+-            name: res.getName(),
+-            avatar: res.getAvatar(),
+-            createTime: res.getCreateTime(),
+-            updateTime: res.getUpdateTime(),
+-            limiter: res.getLimiter(),
+-            status: res.getStatus()
+-        };
++      const request = new users_pb_1.default.GetUserRequest();
++      request.setRef(ref);
++
++      return await new Promise((resolve, reject) => {
++        super.getService().getUser(
++          request,
++          this.getMeta(),
++          (err, res) => {
++            if (err) return reject(err);
++
++            resolve(res.toObject());
++          }
++        );
++      });
+     }
+     /**
+      * Update a Fonoster User.
+@@ -188,18 +186,30 @@ class Users extends common_1.APIClient {
+      * }).catch(e => console.error(e))  // an error occurred
+      */
+     async updateUser(request) {
+-        const req = new users_pb_1.default.UpdateUserRequest();
+-        req.setRef(request.ref);
+-        if (request.name)
+-            req.setName(request.name);
+-        if (request.secret)
+-            req.setSecret(request.secret);
+-        if (request.avatar)
+-            req.setAvatar(request.avatar);
+-        const res = await super.getService().updateUser().sendMessage(req);
+-        return {
+-            ref: res.getRef()
+-        };
++      const req = new users_pb_1.default.UpdateUserRequest();
++      req.setRef(request.ref);
++
++      if (request.name)
++        req.setName(request.name);
++      if (request.secret)
++        req.setSecret(request.secret);
++      if (request.avatar)
++        req.setAvatar(request.avatar);
++      if (request.status)
++        req.setStatus(request.status);
++      if (request.limiter) req.setLimiter(request.limiter);
++
++      return await new Promise((resolve, reject) => {
++        super.getService().updateUser(
++          req,
++          this.getMeta(),
++          (err, res) => {
++            if (err) return reject(err);
++
++            resolve(res.toObject());
++          }
++        );
++      });
+     }
+     /**
+      * Delete an Fonoster User.
