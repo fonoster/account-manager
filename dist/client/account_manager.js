@@ -51,10 +51,6 @@ class AccountManager extends common_1.APIClient {
     constructor(options) {
         super(protos_1.AccountManagerClient, options);
         super.init();
-        /**
-         * @todo Temporal workaround to allow connection to the server
-         */
-        this.service = new this.ServiceClient(this.options.endpoint || process.env.APISERVER_ENDPOINT, grpc.credentials.createInsecure());
     }
     async getPublishableKey(request) {
         const req = new protos_1.GetPublishableKeyRequest();
