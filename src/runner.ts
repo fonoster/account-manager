@@ -33,10 +33,11 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+// TODO: Rename to reflect the service name
 app.post("/webhook", express.raw({type: "application/json"}), webhook);
 
 app.listen(PORT, () => {
-  logger.info("AccountManager service is running");
+  logger.info("AccountManager service is running on port " + PORT);
 
   const services = [
     {

@@ -7,15 +7,21 @@ LABEL Fonoster Team <fonosterteam@fonoster.com>
 COPY . /build
 WORKDIR /build
 
-RUN npm install && npm run build && npm pack
+RUN apk add --no-cache --update curl bash git python3 make cmake g++ \
+  && npm install && npm run build && npm pack
 
 ##
 ## Runner
 ##
-FROM node:lts-alpine as runner
+FROM fonoster/base as runner
 
-COPY --from=builder /build/nodejs-service-*.tgz ./
-RUN npm install -g nodejs-service-*.tgz
+COPY --from=builder /build/fonoster-account-manager-*.tgz ./
+RUN apk add --no-cache --update tini npm nodejs curl bash git python3 make cmake g++ \
+  && npm install -g fonoster-account-manager-*.tgz \
+  && apk del git npm curl python3 make cmake g++; \
+  rm -rf /var/cache/apk/* /tmp/* /var/tmp/* fonoster-account-manager-*.tgz
 
-ENTRYPOINT ["sh", "-c"]
-CMD [ "nodejsservice" ]
+USER fonoster
+
+EXPOSE 50052/tcp
+EXPOSE 3000/tcp

@@ -32,8 +32,8 @@ export const webhook = async (req: Request, res: Response) => {
      */
     const data = event.data.object as unknown as any;
 
-    logger.info(`Webhook received: ${event.type}`);
-    logger.info(`Webhook data: ${JSON.stringify(data)}`);
+    logger.verbose(`Webhook received: ${event.type}`);
+    logger.verbose(`Webhook data: ${JSON.stringify(data)}`);
 
     if (event.type === "payment_method.attached") {
       const customerId = data["customer"];

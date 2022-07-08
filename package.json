@@ -15,7 +15,7 @@
   "main": "dist/client/index",
   "types": "dist/client/index",
   "bin": {
-    "account_manager": "./dist/src/runner.js"
+    "run": "./dist/runner.js"
   },
   "directories": {
     "test": "test",
@@ -27,7 +27,7 @@
   "scripts": {
     "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",
     "build": "tsc -b tsconfig.json",
-    "postbuild": "cp -a ./src/protos/ ./dist/protos",
+    "postbuild": "cp -a ./src/protos/* ./dist/protos",
     "format": "prettier --write src",
     "gen:docs": "node .scripts/docs-generator.js && cp docs/service.md",
     "postinstall": "patch-package",
