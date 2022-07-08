@@ -23,7 +23,7 @@ exports.BillingService = void 0;
  * limitations under the License.
  */
 const stripe_1 = __importDefault(require("stripe"));
-const api_1 = require("./api");
+const sdk_1 = __importDefault(require("@fonoster/sdk"));
 class BillingService {
     constructor(config = {
         secretKey: process.env.STRIPE_SECRET_KEY,
@@ -39,8 +39,16 @@ class BillingService {
     getPublishableKey() {
         return this.config.publishableKey;
     }
-    async upsertCustomer(accessKeyId) {
-        const user = await api_1.users.getUser(accessKeyId);
+    async upsertCustomer(accessKeyId, accessKeySecret) {
+        /**
+         * @todo Allow tokens with admin or service role to execute this action.
+         *
+         * Workaround: Users.getUser()
+         */
+        const user = await new sdk_1.default.Users({
+            accessKeyId,
+            accessKeySecret
+        }).getUser(accessKeyId);
         if (!user)
             throw new Error("User not found");
         const customer = (await this.getCustomer(accessKeyId)) ||

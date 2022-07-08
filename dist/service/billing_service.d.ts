@@ -11,7 +11,7 @@ export declare class BillingService {
         webhookSecret: string;
     });
     getPublishableKey(): string;
-    upsertCustomer(accessKeyId: string): Promise<{
+    upsertCustomer(accessKeyId: string, accessKeySecret: string): Promise<{
         customer: Customer;
         user: import("@fonoster/users/dist/client/types").GetUserResponse;
     }>;

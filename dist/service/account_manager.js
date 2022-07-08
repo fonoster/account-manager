@@ -39,11 +39,12 @@ class AccountManagerServer {
     async addPaymentMethod(call, callback) {
         try {
             const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const accessKeySecret = (0, core_1.getAccessKeySecret)(call);
             const paymentMethodId = call.request.getPaymentMethodId();
-            if (!accessKeyId || !paymentMethodId) {
+            if (!accessKeyId || !paymentMethodId || !accessKeySecret) {
                 throw new Error("Missing required parameters");
             }
-            const { customer } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId);
+            const { customer } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId, accessKeySecret);
             if (!customer)
                 throw new Error("Customer not found");
             const paymentMethod = await billing_service_1.BillingService.getInstance().addPaymentMethod(paymentMethodId, customer);
@@ -109,7 +110,7 @@ class AccountManagerServer {
             if (!accessKeyId || !planRef || !accessKeySecret) {
                 throw new Error("Missing required parameters");
             }
-            const { customer, user } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId);
+            const { customer, user } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId, accessKeySecret);
             if (!customer || !user)
                 throw new Error("Customer not found");
             if (user.status && user.status !== "active") {

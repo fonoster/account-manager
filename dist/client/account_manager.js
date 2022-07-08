@@ -22,7 +22,6 @@ exports.AccountManager = void 0;
 const common_1 = require("@fonoster/common");
 const protos_1 = require("../protos");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const grpc = require("@grpc/grpc-js");
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
  * http://github.com/fonoster

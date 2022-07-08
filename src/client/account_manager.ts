@@ -48,7 +48,6 @@ import {
   IRemovePaymentMethodResponse
 } from "./types";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const grpc = require("@grpc/grpc-js");
 
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
