@@ -78,14 +78,16 @@ export class AccountManagerServer implements IAccountManagerServer {
   ) {
     try {
       const accessKeyId = getAccessKeyId(call);
+      const accessKeySecret = getAccessKeySecret(call);
       const paymentMethodId = call.request.getPaymentMethodId();
 
-      if (!accessKeyId || !paymentMethodId) {
+      if (!accessKeyId || !paymentMethodId || !accessKeySecret) {
         throw new Error("Missing required parameters");
       }
 
-      const customer = await BillingService.getInstance().getCustomer(
-        accessKeyId
+      const {customer} = await BillingService.getInstance().upsertCustomer(
+        accessKeyId,
+        accessKeySecret
       );
 
       if (!customer) throw new Error("Customer not found");
@@ -198,7 +200,10 @@ export class AccountManagerServer implements IAccountManagerServer {
       }
 
       const {customer, user} =
-        await BillingService.getInstance().upsertCustomer(accessKeyId);
+        await BillingService.getInstance().upsertCustomer(
+          accessKeyId,
+          accessKeySecret
+        );
 
       if (!customer || !user) throw new Error("Customer not found");
 

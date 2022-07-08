@@ -22,7 +22,6 @@ exports.AccountManager = void 0;
 const common_1 = require("@fonoster/common");
 const protos_1 = require("../protos");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const grpc = require("@grpc/grpc-js");
 /*
  * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
  * http://github.com/fonoster
@@ -51,10 +50,6 @@ class AccountManager extends common_1.APIClient {
     constructor(options) {
         super(protos_1.AccountManagerClient, options);
         super.init();
-        /**
-         * @todo Temporal workaround to allow connection to the server
-         */
-        this.service = new this.ServiceClient(this.options.endpoint || process.env.APISERVER_ENDPOINT, grpc.credentials.createInsecure());
     }
     async getPublishableKey(request) {
         const req = new protos_1.GetPublishableKeyRequest();

@@ -47,11 +47,8 @@ import {
   IRemovePaymentMethodRequest,
   IRemovePaymentMethodResponse
 } from "./types";
-import * as grpc from "@grpc/grpc-js";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 
-/**
- * Account Manager client
- */
 export class AccountManager extends APIClient implements IAccountManagerClient {
   /**
    * Constructs a new Apps object.
@@ -61,16 +58,7 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
    */
   constructor(options?: ClientOptions) {
     super(AccountManagerClient, options);
-
     super.init();
-
-    /**
-     * @todo Temporal workaround to allow connection to the server
-     */
-    this.service = new this.ServiceClient(
-      this.options.endpoint || process.env.APISERVER_ENDPOINT,
-      grpc.credentials.createInsecure()
-    );
   }
 
   public async getPublishableKey(

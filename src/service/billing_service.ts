@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import Stripe from "stripe";
-import {users} from "./api";
+import Fonoster from "@fonoster/sdk";
 import {Customer} from "./types";
 
 export class BillingService {
@@ -43,8 +43,16 @@ export class BillingService {
     return this.config.publishableKey;
   }
 
-  public async upsertCustomer(accessKeyId: string) {
-    const user = await users.getUser(accessKeyId);
+  public async upsertCustomer(accessKeyId: string, accessKeySecret: string) {
+    /**
+     * @todo Allow tokens with admin or service role to execute this action.
+     *
+     * Workaround: Users.getUser()
+     */
+    const user = await new Fonoster.Users({
+      accessKeyId,
+      accessKeySecret
+    }).getUser(accessKeyId);
 
     if (!user) throw new Error("User not found");
 
