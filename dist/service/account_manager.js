@@ -43,7 +43,7 @@ class AccountManagerServer {
             if (!accessKeyId || !paymentMethodId) {
                 throw new Error("Missing required parameters");
             }
-            const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
+            const { customer } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId);
             if (!customer)
                 throw new Error("Customer not found");
             const paymentMethod = await billing_service_1.BillingService.getInstance().addPaymentMethod(paymentMethodId, customer);
