@@ -84,7 +84,7 @@ export class AccountManagerServer implements IAccountManagerServer {
         throw new Error("Missing required parameters");
       }
 
-      const customer = await BillingService.getInstance().getCustomer(
+      const {customer} = await BillingService.getInstance().upsertCustomer(
         accessKeyId
       );
 
