@@ -123,17 +123,29 @@ export class AccountManagerServer implements IAccountManagerServer {
   ) {
     try {
       const accessKeyId = getAccessKeyId(call);
+      const accessKeySecret = getAccessKeySecret(call);
       const paymentMethodId = call.request.getPaymentMethodId();
 
       if (!accessKeyId || !paymentMethodId) {
         throw new Error("Missing required parameters");
       }
 
-      const customer = await BillingService.getInstance().getCustomer(
-        accessKeyId
-      );
+      const {customer, user} =
+        await BillingService.getInstance().upsertCustomer(
+          accessKeyId,
+          accessKeySecret
+        );
 
       if (!customer) throw new Error("Customer not found");
+
+      const paymentMethods =
+        await BillingService.getInstance().listPaymentMethods(accessKeyId);
+
+      if (paymentMethods.length === 1 && user.limiter !== "starter") {
+        throw new Error(
+          "You can't delete your only payment method. Add another payment option and then remove this one, or change your plan to starter first."
+        );
+      }
 
       const paymentMethod =
         await BillingService.getInstance().removePaymentMethod(paymentMethodId);
