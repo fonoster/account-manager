@@ -22,7 +22,8 @@
     "src": "src"
   },
   "files": [
-    "dist"
+    "dist",
+    "patches"
   ],
   "scripts": {
     "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",
