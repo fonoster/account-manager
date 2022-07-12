@@ -171,7 +171,9 @@ class BillingService {
             status: "paid",
             customer: customer.ref
         });
-        return invoices.data.map((invoice) => ({
+        return invoices.data
+            .filter((inv) => inv.amount_due)
+            .map((invoice) => ({
             ref: invoice.id,
             amount: invoice.amount_due,
             currency: invoice.currency,

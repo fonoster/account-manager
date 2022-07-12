@@ -1,4 +1,4 @@
-import { AddPaymentMethodRequest, AddPaymentMethodResponse, ChangePlanRequest, ChangePlanResponse, GetPlanRequest, GetPlanResponse, GetPublishableKeyRequest, GetPublishableKeyResponse, ListInvoicesRequest, ListInvoicesResponse, ListPaymentMethodRequest, ListPaymentMethodResponse, ListPlansRequest, ListPlansResponse, RemovePaymentMethodRequest, RemovePaymentMethodResponse } from "../protos";
+import { AddPaymentMethodRequest, AddPaymentMethodResponse, ChangePlanRequest, ChangePlanResponse, GetPlanRequest, GetPlanResponse, GetPublishableKeyRequest, GetPublishableKeyResponse, ListInvoicesRequest, ListInvoicesResponse, ListPaymentMethodRequest, ListPaymentMethodResponse, ListPlansRequest, ListPlansResponse, RemovePaymentMethodRequest, RemovePaymentMethodResponse, SetDefaultPaymentMethodRequest, SetDefaultPaymentMethodResponse } from "../protos";
 export declare type IGetPublishableKeyRequest = GetPublishableKeyRequest.AsObject;
 export declare type IGetPublishableKeyResponse = GetPublishableKeyResponse.AsObject;
 export declare type IChangePlanRequest = ChangePlanRequest.AsObject;
@@ -15,6 +15,8 @@ export declare type IAddPaymentMethodRequest = AddPaymentMethodRequest.AsObject;
 export declare type IAddPaymentMethodResponse = AddPaymentMethodResponse.AsObject;
 export declare type IRemovePaymentMethodRequest = RemovePaymentMethodRequest.AsObject;
 export declare type IRemovePaymentMethodResponse = RemovePaymentMethodResponse.AsObject;
+export declare type ISetDefaultPaymentMethodRequest = SetDefaultPaymentMethodRequest.AsObject;
+export declare type ISetDefaultPaymentMethodResponse = SetDefaultPaymentMethodResponse.AsObject;
 export interface IAccountManagerClient {
     getPublishableKey(request: IGetPublishableKeyRequest): Promise<IGetPublishableKeyResponse>;
     changePlan(request: IChangePlanRequest): Promise<IChangePlanResponse>;
@@ -24,4 +26,5 @@ export interface IAccountManagerClient {
     addPaymentMethod(request: IAddPaymentMethodRequest): Promise<IAddPaymentMethodResponse>;
     removePaymentMethod(request: IRemovePaymentMethodRequest): Promise<IRemovePaymentMethodResponse>;
     listInvoices(request: IListInvoicesRequest): Promise<IListInvoicesResponse>;
+    setDefaultPaymentMethod(request: ISetDefaultPaymentMethodRequest): Promise<ISetDefaultPaymentMethodResponse>;
 }

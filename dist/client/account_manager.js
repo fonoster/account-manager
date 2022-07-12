@@ -151,5 +151,18 @@ class AccountManager extends common_1.APIClient {
             });
         });
     }
+    async setDefaultPaymentMethod(request) {
+        if (!request.paymentMethodId) {
+            throw new Error("Missing paymentMethodId");
+        }
+        const req = new protos_1.SetDefaultPaymentMethodRequest().setPaymentMethodId(request.paymentMethodId);
+        return await new Promise((resolve, reject) => {
+            this.service.setDefaultPaymentMethod(req, this.getMeta(), (err, res) => {
+                if (err)
+                    return reject(err);
+                resolve(res.toObject());
+            });
+        });
+    }
 }
 exports.AccountManager = AccountManager;

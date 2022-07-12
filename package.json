@@ -22,7 +22,8 @@
     "src": "src"
   },
   "files": [
-    "dist"
+    "dist/client",
+    "dist/protos"
   ],
   "scripts": {
     "prebuild": "rimraf ./dist tsconfig.tsbuildinfo",

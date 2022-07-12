@@ -208,12 +208,14 @@ export class BillingService {
       customer: customer.ref
     });
 
-    return invoices.data.map((invoice) => ({
-      ref: invoice.id,
-      amount: invoice.amount_due,
-      currency: invoice.currency,
-      createdAt: invoice.created
-    }));
+    return invoices.data
+      .filter((inv) => inv.amount_due)
+      .map((invoice) => ({
+        ref: invoice.id,
+        amount: invoice.amount_due,
+        currency: invoice.currency,
+        createdAt: invoice.created
+      }));
   }
 
   public async addPaymentMethod(paymentMethodId: string, customer: Customer) {

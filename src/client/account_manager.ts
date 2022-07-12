@@ -26,7 +26,8 @@ import {
   ListInvoicesRequest,
   ListPaymentMethodRequest,
   ListPlansRequest,
-  RemovePaymentMethodRequest
+  RemovePaymentMethodRequest,
+  SetDefaultPaymentMethodRequest
 } from "../protos";
 import {
   IAccountManagerClient,
@@ -45,7 +46,9 @@ import {
   IListPlansRequest,
   IListPlansResponse,
   IRemovePaymentMethodRequest,
-  IRemovePaymentMethodResponse
+  IRemovePaymentMethodResponse,
+  ISetDefaultPaymentMethodRequest,
+  ISetDefaultPaymentMethodResponse
 } from "./types";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
@@ -224,6 +227,30 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).listInvoices(
+        req,
+        this.getMeta(),
+        (err, res) => {
+          if (err) return reject(err);
+
+          resolve(res.toObject());
+        }
+      );
+    });
+  }
+
+  public async setDefaultPaymentMethod(
+    request: ISetDefaultPaymentMethodRequest
+  ): Promise<ISetDefaultPaymentMethodResponse> {
+    if (!request.paymentMethodId) {
+      throw new Error("Missing paymentMethodId");
+    }
+
+    const req = new SetDefaultPaymentMethodRequest().setPaymentMethodId(
+      request.paymentMethodId
+    );
+
+    return await new Promise((resolve, reject) => {
+      (this.service as AccountManagerClient).setDefaultPaymentMethod(
         req,
         this.getMeta(),
         (err, res) => {

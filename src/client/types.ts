@@ -32,7 +32,9 @@ import {
   ListPlansRequest,
   ListPlansResponse,
   RemovePaymentMethodRequest,
-  RemovePaymentMethodResponse
+  RemovePaymentMethodResponse,
+  SetDefaultPaymentMethodRequest,
+  SetDefaultPaymentMethodResponse
 } from "../protos";
 
 export type IGetPublishableKeyRequest = GetPublishableKeyRequest.AsObject;
@@ -59,6 +61,11 @@ export type IAddPaymentMethodResponse = AddPaymentMethodResponse.AsObject;
 export type IRemovePaymentMethodRequest = RemovePaymentMethodRequest.AsObject;
 export type IRemovePaymentMethodResponse = RemovePaymentMethodResponse.AsObject;
 
+export type ISetDefaultPaymentMethodRequest =
+  SetDefaultPaymentMethodRequest.AsObject;
+export type ISetDefaultPaymentMethodResponse =
+  SetDefaultPaymentMethodResponse.AsObject;
+
 export interface IAccountManagerClient {
   getPublishableKey(
     request: IGetPublishableKeyRequest
@@ -76,4 +83,7 @@ export interface IAccountManagerClient {
     request: IRemovePaymentMethodRequest
   ): Promise<IRemovePaymentMethodResponse>;
   listInvoices(request: IListInvoicesRequest): Promise<IListInvoicesResponse>;
+  setDefaultPaymentMethod(
+    request: ISetDefaultPaymentMethodRequest
+  ): Promise<ISetDefaultPaymentMethodResponse>;
 }
