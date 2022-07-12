@@ -38,13 +38,12 @@ export const webhook = async (req: Request, res: Response) => {
     if (event.type === "payment_method.attached") {
       const customerId = data["customer"];
 
-      const customer = (await BillingService.getInstance()
-        .getStripe()
-        .customers.retrieve(customerId, {
-          expand: ["data.subscriptions"]
-        })) as Stripe.Customer;
-
-      const subscription = customer.subscriptions.data?.[0];
+      const subscription = (
+        await BillingService.getInstance().getStripe().subscriptions.list({
+          customer: customerId,
+          limit: 1
+        })
+      )?.data?.[0];
 
       if (subscription) {
         await BillingService.getInstance()
