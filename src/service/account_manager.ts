@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {getAccessKeyId, getAccessKeySecret} from "@fonoster/core";
 import type {
   ServerUnaryCall,
   ServiceError,
@@ -47,6 +46,7 @@ import {
 } from "../protos";
 import {users} from "./api";
 import {BillingService} from "./billing_service";
+import {getUserLogged} from "./getUserLogged";
 
 export interface ICallback<R> {
   (error: ServiceError | null, response: R): void;
@@ -77,8 +77,7 @@ export class AccountManagerServer implements IAccountManagerServer {
     callback: ICallback<AddPaymentMethodResponse>
   ) {
     try {
-      const accessKeyId = getAccessKeyId(call);
-      const accessKeySecret = getAccessKeySecret(call);
+      const {accessKeyId, accessKeySecret} = getUserLogged(call);
       const paymentMethodId = call.request.getPaymentMethodId();
 
       if (!accessKeyId || !paymentMethodId || !accessKeySecret) {
@@ -122,8 +121,7 @@ export class AccountManagerServer implements IAccountManagerServer {
     callback: ICallback<RemovePaymentMethodResponse>
   ) {
     try {
-      const accessKeyId = getAccessKeyId(call);
-      const accessKeySecret = getAccessKeySecret(call);
+      const {accessKeyId, accessKeySecret} = getUserLogged(call);
       const paymentMethodId = call.request.getPaymentMethodId();
 
       if (!accessKeyId || !paymentMethodId) {
@@ -168,7 +166,7 @@ export class AccountManagerServer implements IAccountManagerServer {
     callback: ICallback<SetDefaultPaymentMethodResponse>
   ) {
     try {
-      const accessKeyId = getAccessKeyId(call);
+      const {accessKeyId} = getUserLogged(call);
       const paymentMethodId = call.request.getPaymentMethodId();
 
       if (!accessKeyId || !paymentMethodId) {
@@ -202,8 +200,7 @@ export class AccountManagerServer implements IAccountManagerServer {
     callback: ICallback<ChangePlanResponse>
   ) {
     try {
-      const accessKeyId = getAccessKeyId(call);
-      const accessKeySecret = getAccessKeySecret(call);
+      const {accessKeyId, accessKeySecret} = getUserLogged(call);
 
       const planRef = call.request.getPlanRef();
 
@@ -336,7 +333,7 @@ export class AccountManagerServer implements IAccountManagerServer {
     callback: ICallback<ListPaymentMethodResponse>
   ) {
     try {
-      const accessKeyId = getAccessKeyId(call);
+      const {accessKeyId} = getUserLogged(call);
       const paymentMethodType = call.request.getPaymentType() || undefined;
 
       if (!accessKeyId) {
@@ -370,7 +367,7 @@ export class AccountManagerServer implements IAccountManagerServer {
     callback: ICallback<ListInvoicesResponse>
   ) {
     try {
-      const accessKeyId = getAccessKeyId(call);
+      const {accessKeyId} = getUserLogged(call);
 
       if (!accessKeyId) {
         throw new Error("Missing required parameters");

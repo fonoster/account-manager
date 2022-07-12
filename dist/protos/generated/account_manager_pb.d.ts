@@ -6,6 +6,29 @@
 
 import * as jspb from "google-protobuf";
 
+export class User extends jspb.Message { 
+    getAccessKeyId(): string;
+    setAccessKeyId(value: string): User;
+    getAccessKeySecret(): string;
+    setAccessKeySecret(value: string): User;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): User.AsObject;
+    static toObject(includeInstance: boolean, msg: User): User.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: User, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): User;
+    static deserializeBinaryFromReader(message: User, reader: jspb.BinaryReader): User;
+}
+
+export namespace User {
+    export type AsObject = {
+        accessKeyId: string,
+        accessKeySecret: string,
+    }
+}
+
 export class Plan extends jspb.Message { 
     getRef(): string;
     setRef(value: string): Plan;
@@ -77,6 +100,11 @@ export class ChangePlanRequest extends jspb.Message {
     getPlanRef(): string;
     setPlanRef(value: string): ChangePlanRequest;
 
+    hasUser(): boolean;
+    clearUser(): void;
+    getUser(): User | undefined;
+    setUser(value?: User): ChangePlanRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ChangePlanRequest.AsObject;
     static toObject(includeInstance: boolean, msg: ChangePlanRequest): ChangePlanRequest.AsObject;
@@ -90,6 +118,7 @@ export class ChangePlanRequest extends jspb.Message {
 export namespace ChangePlanRequest {
     export type AsObject = {
         planRef: string,
+        user?: User.AsObject,
     }
 }
 
@@ -211,6 +240,11 @@ export class ListPaymentMethodRequest extends jspb.Message {
     getPaymentType(): string | undefined;
     setPaymentType(value: string): ListPaymentMethodRequest;
 
+    hasUser(): boolean;
+    clearUser(): void;
+    getUser(): User | undefined;
+    setUser(value?: User): ListPaymentMethodRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ListPaymentMethodRequest.AsObject;
     static toObject(includeInstance: boolean, msg: ListPaymentMethodRequest): ListPaymentMethodRequest.AsObject;
@@ -224,6 +258,7 @@ export class ListPaymentMethodRequest extends jspb.Message {
 export namespace ListPaymentMethodRequest {
     export type AsObject = {
         paymentType?: string,
+        user?: User.AsObject,
     }
 }
 
@@ -256,6 +291,11 @@ export class ListInvoicesRequest extends jspb.Message {
     getLimit(): number | undefined;
     setLimit(value: number): ListInvoicesRequest;
 
+    hasUser(): boolean;
+    clearUser(): void;
+    getUser(): User | undefined;
+    setUser(value?: User): ListInvoicesRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ListInvoicesRequest.AsObject;
     static toObject(includeInstance: boolean, msg: ListInvoicesRequest): ListInvoicesRequest.AsObject;
@@ -269,6 +309,7 @@ export class ListInvoicesRequest extends jspb.Message {
 export namespace ListInvoicesRequest {
     export type AsObject = {
         limit?: number,
+        user?: User.AsObject,
     }
 }
 
@@ -372,6 +413,11 @@ export class AddPaymentMethodRequest extends jspb.Message {
     getPaymentMethodId(): string;
     setPaymentMethodId(value: string): AddPaymentMethodRequest;
 
+    hasUser(): boolean;
+    clearUser(): void;
+    getUser(): User | undefined;
+    setUser(value?: User): AddPaymentMethodRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): AddPaymentMethodRequest.AsObject;
     static toObject(includeInstance: boolean, msg: AddPaymentMethodRequest): AddPaymentMethodRequest.AsObject;
@@ -385,6 +431,7 @@ export class AddPaymentMethodRequest extends jspb.Message {
 export namespace AddPaymentMethodRequest {
     export type AsObject = {
         paymentMethodId: string,
+        user?: User.AsObject,
     }
 }
 
@@ -415,6 +462,11 @@ export class RemovePaymentMethodRequest extends jspb.Message {
     getPaymentMethodId(): string;
     setPaymentMethodId(value: string): RemovePaymentMethodRequest;
 
+    hasUser(): boolean;
+    clearUser(): void;
+    getUser(): User | undefined;
+    setUser(value?: User): RemovePaymentMethodRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): RemovePaymentMethodRequest.AsObject;
     static toObject(includeInstance: boolean, msg: RemovePaymentMethodRequest): RemovePaymentMethodRequest.AsObject;
@@ -428,6 +480,7 @@ export class RemovePaymentMethodRequest extends jspb.Message {
 export namespace RemovePaymentMethodRequest {
     export type AsObject = {
         paymentMethodId: string,
+        user?: User.AsObject,
     }
 }
 
@@ -455,6 +508,11 @@ export class SetDefaultPaymentMethodRequest extends jspb.Message {
     getPaymentMethodId(): string;
     setPaymentMethodId(value: string): SetDefaultPaymentMethodRequest;
 
+    hasUser(): boolean;
+    clearUser(): void;
+    getUser(): User | undefined;
+    setUser(value?: User): SetDefaultPaymentMethodRequest;
+
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): SetDefaultPaymentMethodRequest.AsObject;
     static toObject(includeInstance: boolean, msg: SetDefaultPaymentMethodRequest): SetDefaultPaymentMethodRequest.AsObject;
@@ -468,6 +526,7 @@ export class SetDefaultPaymentMethodRequest extends jspb.Message {
 export namespace SetDefaultPaymentMethodRequest {
     export type AsObject = {
         paymentMethodId: string,
+        user?: User.AsObject,
     }
 }
 

@@ -27,7 +27,8 @@ import {
   ListPaymentMethodRequest,
   ListPlansRequest,
   RemovePaymentMethodRequest,
-  SetDefaultPaymentMethodRequest
+  SetDefaultPaymentMethodRequest,
+  User
 } from "../protos";
 import {
   IAccountManagerClient,
@@ -89,9 +90,13 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
   public async changePlan(
     request: IChangePlanRequest
   ): Promise<IChangePlanResponse> {
-    const req = new ChangePlanRequest();
-
-    req.setPlanRef(request.planRef);
+    const req = new ChangePlanRequest()
+      .setPlanRef(request.planRef)
+      .setUser(
+        new User()
+          .setAccessKeyId(request.user.accessKeyId)
+          .setAccessKeySecret(request.user.accessKeySecret)
+      );
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).changePlan(
@@ -153,9 +158,13 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
       throw new Error("Missing paymentMethodId");
     }
 
-    const req = new AddPaymentMethodRequest().setPaymentMethodId(
-      request.paymentMethodId
-    );
+    const req = new AddPaymentMethodRequest()
+      .setPaymentMethodId(request.paymentMethodId)
+      .setUser(
+        new User()
+          .setAccessKeyId(request.user.accessKeyId)
+          .setAccessKeySecret(request.user.accessKeySecret)
+      );
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).addPaymentMethod(
@@ -177,9 +186,13 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
       throw new Error("Missing paymentMethodId");
     }
 
-    const req = new RemovePaymentMethodRequest().setPaymentMethodId(
-      request.paymentMethodId
-    );
+    const req = new RemovePaymentMethodRequest()
+      .setPaymentMethodId(request.paymentMethodId)
+      .setUser(
+        new User()
+          .setAccessKeyId(request.user.accessKeyId)
+          .setAccessKeySecret(request.user.accessKeySecret)
+      );
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).removePaymentMethod(
@@ -201,6 +214,11 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
 
     if (request) {
       req.setPaymentType(request.paymentType);
+      req.setUser(
+        new User()
+          .setAccessKeyId(request.user.accessKeyId)
+          .setAccessKeySecret(request.user.accessKeySecret)
+      );
     }
 
     return await new Promise((resolve, reject) => {
@@ -223,6 +241,11 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
 
     if (request) {
       req.setLimit(request.limit);
+      req.setUser(
+        new User()
+          .setAccessKeyId(request.user.accessKeyId)
+          .setAccessKeySecret(request.user.accessKeySecret)
+      );
     }
 
     return await new Promise((resolve, reject) => {
@@ -245,9 +268,13 @@ export class AccountManager extends APIClient implements IAccountManagerClient {
       throw new Error("Missing paymentMethodId");
     }
 
-    const req = new SetDefaultPaymentMethodRequest().setPaymentMethodId(
-      request.paymentMethodId
-    );
+    const req = new SetDefaultPaymentMethodRequest()
+      .setPaymentMethodId(request.paymentMethodId)
+      .setUser(
+        new User()
+          .setAccessKeyId(request.user.accessKeyId)
+          .setAccessKeySecret(request.user.accessKeySecret)
+      );
 
     return await new Promise((resolve, reject) => {
       (this.service as AccountManagerClient).setDefaultPaymentMethod(

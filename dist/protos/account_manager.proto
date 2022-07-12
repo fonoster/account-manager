@@ -2,6 +2,11 @@ syntax = "proto3";
 
 package fonoster.account_manager.v1beta1;
 
+message User {
+  string access_key_id = 1;
+  string access_key_secret = 2;
+}
+
 message Plan {
   string ref = 1;
   string name = 2;
@@ -21,6 +26,7 @@ message PaymentMethod {
 
 message ChangePlanRequest {
   string plan_ref = 1;
+  User user = 2;
 }
 
 message ChangePlanResponse {
@@ -45,6 +51,7 @@ message ListPlansResponse {
 
 message ListPaymentMethodRequest {
   optional string payment_type = 1;
+  User user = 2;
 }
 
 message ListPaymentMethodResponse {
@@ -53,6 +60,7 @@ message ListPaymentMethodResponse {
 
 message ListInvoicesRequest {
   optional int32 limit = 1;
+  User user = 2;
 }
 
 message ListInvoicesResponse {
@@ -76,6 +84,7 @@ message GetPublishableKeyResponse {
 
 message AddPaymentMethodRequest {
   string payment_method_id = 1;
+  User user = 2;
 }
 
 message AddPaymentMethodResponse {
@@ -84,6 +93,7 @@ message AddPaymentMethodResponse {
 
 message RemovePaymentMethodRequest {
   string payment_method_id = 1;
+  User user = 2;
 }
 
 message RemovePaymentMethodResponse {
@@ -92,6 +102,7 @@ message RemovePaymentMethodResponse {
 
 message SetDefaultPaymentMethodRequest {
   string payment_method_id = 1;
+  User user = 2;
 }
 
 message SetDefaultPaymentMethodResponse {

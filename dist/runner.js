@@ -33,9 +33,10 @@ const webhook_1 = require("./service/webhook");
 common_1.Tracer.init("account-manager-service");
 const PORT = process.env.PORT || 3000;
 const app = (0, express_1.default)();
+// TODO: Rename to reflect the service name
 app.post("/webhook", express_1.default.raw({ type: "application/json" }), webhook_1.webhook);
 app.listen(PORT, () => {
-    logger_1.default.info("AccountManager service is running");
+    logger_1.default.info("AccountManager service is running on port " + PORT);
     const services = [
         {
             name: "AccountManager",

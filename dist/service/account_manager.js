@@ -1,28 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AccountManagerServer = void 0;
-/*
- * Copyright (C) 2022 by Fonoster Inc (https://fonoster.com)
- * http://github.com/fonoster
- *
- * This file is part of account-manager
- *
- * Licensed under the MIT License (the "License");
- * you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- *    https://opensource.org/licenses/MIT
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-const core_1 = require("@fonoster/core");
 const protos_1 = require("../protos");
 const api_1 = require("./api");
 const billing_service_1 = require("./billing_service");
+const getUserLogged_1 = require("./getUserLogged");
 class AccountManagerServer {
     getPublishableKey(call, callback) {
         try {
@@ -38,8 +20,7 @@ class AccountManagerServer {
     }
     async addPaymentMethod(call, callback) {
         try {
-            const accessKeyId = (0, core_1.getAccessKeyId)(call);
-            const accessKeySecret = (0, core_1.getAccessKeySecret)(call);
+            const { accessKeyId, accessKeySecret } = (0, getUserLogged_1.getUserLogged)(call);
             const paymentMethodId = call.request.getPaymentMethodId();
             if (!accessKeyId || !paymentMethodId || !accessKeySecret) {
                 throw new Error("Missing required parameters");
@@ -64,14 +45,18 @@ class AccountManagerServer {
     }
     async removePaymentMethod(call, callback) {
         try {
-            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const { accessKeyId, accessKeySecret } = (0, getUserLogged_1.getUserLogged)(call);
             const paymentMethodId = call.request.getPaymentMethodId();
             if (!accessKeyId || !paymentMethodId) {
                 throw new Error("Missing required parameters");
             }
-            const customer = await billing_service_1.BillingService.getInstance().getCustomer(accessKeyId);
+            const { customer, user } = await billing_service_1.BillingService.getInstance().upsertCustomer(accessKeyId, accessKeySecret);
             if (!customer)
                 throw new Error("Customer not found");
+            const paymentMethods = await billing_service_1.BillingService.getInstance().listPaymentMethods(accessKeyId);
+            if (paymentMethods.length === 1 && user.limiter !== "starter") {
+                throw new Error("You can't delete your only payment method. Add another payment option and then remove this one, or change your plan to starter first.");
+            }
             const paymentMethod = await billing_service_1.BillingService.getInstance().removePaymentMethod(paymentMethodId);
             if (!paymentMethod)
                 throw new Error("Payment method not removed");
@@ -84,7 +69,7 @@ class AccountManagerServer {
     }
     async setDefaultPaymentMethod(call, callback) {
         try {
-            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const { accessKeyId } = (0, getUserLogged_1.getUserLogged)(call);
             const paymentMethodId = call.request.getPaymentMethodId();
             if (!accessKeyId || !paymentMethodId) {
                 throw new Error("Missing required parameters");
@@ -104,8 +89,7 @@ class AccountManagerServer {
     }
     async changePlan(call, callback) {
         try {
-            const accessKeyId = (0, core_1.getAccessKeyId)(call);
-            const accessKeySecret = (0, core_1.getAccessKeySecret)(call);
+            const { accessKeyId, accessKeySecret } = (0, getUserLogged_1.getUserLogged)(call);
             const planRef = call.request.getPlanRef();
             if (!accessKeyId || !planRef || !accessKeySecret) {
                 throw new Error("Missing required parameters");
@@ -192,7 +176,7 @@ class AccountManagerServer {
     }
     async listPaymentMethods(call, callback) {
         try {
-            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const { accessKeyId } = (0, getUserLogged_1.getUserLogged)(call);
             const paymentMethodType = call.request.getPaymentType() || undefined;
             if (!accessKeyId) {
                 throw new Error("Missing required parameters");
@@ -212,7 +196,7 @@ class AccountManagerServer {
     }
     async listInvoices(call, callback) {
         try {
-            const accessKeyId = (0, core_1.getAccessKeyId)(call);
+            const { accessKeyId } = (0, getUserLogged_1.getUserLogged)(call);
             if (!accessKeyId) {
                 throw new Error("Missing required parameters");
             }
